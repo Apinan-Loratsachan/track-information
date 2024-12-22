@@ -172,6 +172,7 @@ export default function Home() {
         >
           <iframe
             id="spotify-embed-iframe"
+            title="Spotify-Embed"
             src={spotifyEmbed}
             height={"200"}
             allow="encrypted-media"
