@@ -28,7 +28,7 @@ export default function Home() {
   const genre = searchParams.get("ge");
   const year = searchParams.get("y");
   const language = searchParams.get("lang");
-  const related = searchParams.get("rel");
+  const related = searchParams.get("rel") || "";
   const customAlbumCover = searchParams.get("cti");
   const spotifyAlbumId = searchParams.get("aref");
   const spotifyTrackId = searchParams.get("tref");
