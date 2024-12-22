@@ -1,11 +1,15 @@
 import "@/src/styles/globals.css";
 import "@/src/styles/background.css";
+import "@/src/styles/table.css";
+import "@/src/styles/cover.css";
+import "@/src/styles/spotify.css";
+import "animate.css";
+import bg from "../../public/background.jpg";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
 
 import { Providers } from "./providers";
 import { fontSans } from "@/src/config/fonts";
-import { ThemeSwitch } from "@/src/components/theme-switch";
 
 export const metadata: Metadata = {
   title: {
@@ -34,17 +38,15 @@ export default function RootLayout({
     <html suppressHydrationWarning lang="en">
       <head />
       <body
+        style={{ backgroundImage: `url(${bg.src})` }}
         className={clsx(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-screen font-sans antialiased",
           fontSans.variable
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <div>
-            <div style={{ textAlign: "right" }}>
-              <ThemeSwitch className="p-3" />
-            </div>
-            {children}
+          <div style={{ background: "transparent" }}>
+            <div style={{ padding: "50px 0" }}>{children}</div>
           </div>
         </Providers>
       </body>

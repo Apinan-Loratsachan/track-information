@@ -1,0 +1,7 @@
+#album-cover {
+  scale: 1.04;
+  transition: all 1s ease-in-out;
+  &:hover {
+    scale: 1;
+  }
+}

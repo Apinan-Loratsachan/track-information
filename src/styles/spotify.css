@@ -1,0 +1,18 @@
+#spotify-embed,
+#spotify-embed-iframe {
+  position: relative;
+  z-index: 50;
+  margin: auto;
+  z-index: 2;
+}
+
+#spotify-embed {
+  opacity: 1;
+  transition: all 1s ease-in-out;
+  max-width: 800px;
+  height: 0px;
+}
+
+#spotify-embed-iframe {
+  width: 100%;
+}

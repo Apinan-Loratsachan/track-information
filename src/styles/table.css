@@ -1,0 +1,18 @@
+#meta-table {
+  width: 100%;
+}
+
+#meta-table tr {
+  height: 50px;
+  padding: 10px 0;
+}
+
+#meta-table tr td:nth-child(1) {
+  width: 20%;
+  padding-left: 10px;
+}
+
+#meta-table tr td:nth-child(3) {
+  text-align: center;
+  width: 15%;
+}
