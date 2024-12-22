@@ -36,7 +36,12 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning lang="en">
-      <head />
+      <head>
+        <script
+          src="https://kit.fontawesome.com/da71fc72b9.js"
+          crossOrigin="anonymous"
+        ></script>
+      </head>
       <body
         style={{ backgroundImage: `url(${bg.src})` }}
         className={clsx(

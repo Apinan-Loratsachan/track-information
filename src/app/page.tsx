@@ -11,6 +11,9 @@ import {
   Button,
   Link,
   Spinner,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { Suspense } from "react";
@@ -48,6 +51,7 @@ function Main() {
   const [cover, setCover] = useState<string | null>(null);
   const [spotifyEmbed, setSpotifyEmbed] = useState<string>("");
   const [spotifyEmbedOpacity, setSpotifyEmbedOpacity] = useState<number>(0);
+  const [searchWarning, setSearchWarning] = useState<boolean>(false);
 
   let splitRelated = (related as string).split(";").map((id) => id.trim());
 
@@ -150,6 +154,25 @@ function Main() {
         } catch (err: any) {
           setError(err.message);
         }
+      } else {
+        const response = await fetch(
+          `/api/spotify/search?search=${album} ${albumArtist}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch album data");
+        }
+        const data = await response.json();
+        console.log(data);
+        setAlbumData(data);
+        setCover(data.albums.items[0].images[0].url);
+        const favicon = document.createElement("link");
+        favicon.rel = "icon";
+        favicon.type = "image/x-icon";
+        favicon.href = data.albums.items[0].images[0].url; // Replace with your favicon URL
+        document.head.appendChild(favicon);
+        const bg = document.getElementById("background") as HTMLDivElement;
+        bg.style.backgroundImage = `url(${data.albums.items[0].images[0].url})`;
+        setSearchWarning(true);
       }
 
       if ((spotifyTrackId as string) !== "") {
@@ -199,16 +222,49 @@ function Main() {
         <Card className="max-w-[400px]" isBlurred radius="lg">
           <CardHeader className="flex gap-3 justify-center">
             {cover ? (
-              <Link href={cover} target="_blank">
-                <Image
-                  id="album-cover"
-                  alt="nextui logo"
-                  radius="sm"
-                  src={cover as string}
-                  width={800}
-                  isBlurred
-                />
-              </Link>
+              <div style={{ position: "relative", translate: "0 4px" }}>
+                <Link
+                  href={cover}
+                  target="_blank"
+                  style={{ position: "relative" }}
+                >
+                  <Image
+                    id="album-cover"
+                    alt="nextui logo"
+                    radius="sm"
+                    src={cover as string}
+                    width={800}
+                    isBlurred
+                  />
+                </Link>
+                <div
+                  style={{
+                    position: "absolute",
+                    right: 10,
+                    bottom: 0,
+                    zIndex: 50,
+                  }}
+                >
+                  {searchWarning ? (
+                    <Popover placement="left" showArrow>
+                      <PopoverTrigger>
+                        <Button isIconOnly>
+                          <i className="fa-solid fa-circle-info fa-2xl" />
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent>
+                        <div className="px-1 py-2">
+                          <div className="text-small font-bold">Warning</div>
+                          <div className="text-tiny">
+                            This cover is from a search result. It may not be
+                            the actual cover of the album.
+                          </div>
+                        </div>
+                      </PopoverContent>
+                    </Popover>
+                  ) : null}
+                </div>
+              </div>
             ) : (
               <Spinner size="lg" />
             )}
