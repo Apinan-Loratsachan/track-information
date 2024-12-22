@@ -49,6 +49,7 @@ function Main() {
   const [albumData, setAlbumData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [cover, setCover] = useState<string | null>(null);
+  const [background, setBackground] = useState<string | null>(null);
   const [spotifyEmbed, setSpotifyEmbed] = useState<string>("");
   const [spotifyEmbedOpacity, setSpotifyEmbedOpacity] = useState<number>(0);
   const [searchWarning, setSearchWarning] = useState<boolean>(false);
@@ -69,6 +70,9 @@ function Main() {
           const data = await response.json();
           setAlbumData(data);
 
+          // Set background image
+          const bg = document.getElementById("background") as HTMLDivElement;
+
           // Set favicon
           const favicon = document.createElement("link");
           favicon.rel = "icon";
@@ -80,16 +84,14 @@ function Main() {
             console.log;
             setCover(customAlbumCover);
             favicon.href = customAlbumCover;
+            setBackground(`url(${customAlbumCover})`);
           } else if (data?.images?.[0]?.url) {
             setCover(data.images[0].url);
-            favicon.href = data.images[0].url; // Replace with your favicon URL
+            favicon.href = data.images[0].url;
+            setBackground(`url(${data.images[0].url})`);
           }
 
           document.head.appendChild(favicon);
-
-          // Set background image
-          const bg = document.getElementById("background") as HTMLDivElement;
-          bg.style.backgroundImage = `url(${data.images[0].url})`;
 
           if (discCount != 1) {
             let trackData;
@@ -126,7 +128,7 @@ function Main() {
         favicon.href = customAlbumCover;
         document.head.appendChild(favicon);
         const bg = document.getElementById("background") as HTMLDivElement;
-        bg.style.backgroundImage = `url(${customAlbumCover})`;
+        setBackground(`url(${customAlbumCover})`);
       } else if ((spotifyCoverId as string) !== "") {
         try {
           const response = await fetch(
@@ -150,7 +152,7 @@ function Main() {
 
           // Set background image
           const bg = document.getElementById("background") as HTMLDivElement;
-          bg.style.backgroundImage = `url(${data.images[0].url})`;
+          setBackground(`url(${data.images[0].url})`);
         } catch (err: any) {
           setError(err.message);
         }
@@ -171,7 +173,7 @@ function Main() {
         favicon.href = data.albums.items[0].images[0].url; // Replace with your favicon URL
         document.head.appendChild(favicon);
         const bg = document.getElementById("background") as HTMLDivElement;
-        bg.style.backgroundImage = `url(${data.albums.items[0].images[0].url})`;
+        setBackground(`url(${data.albums.items[0].images[0].url})`);
         setSearchWarning(true);
       }
 
@@ -190,7 +192,13 @@ function Main() {
 
   return (
     <div style={{ padding: "0 20px" }}>
-      <div id="background" className="bg" />
+      {background != "" || background != null ? (
+        <div
+          id="background"
+          className="bg animate__animated animate__fadeIn animate__delay-1s"
+          style={{ backgroundImage: background as string }}
+        />
+      ) : null}
       {spotifyEmbed ? (
         <div
           id="spotify-embed"
@@ -222,7 +230,7 @@ function Main() {
         <Card className="max-w-[400px]" isBlurred radius="lg">
           <CardHeader className="flex gap-3 justify-center">
             {cover ? (
-              <div style={{ position: "relative", translate: "0 4px" }}>
+              <div style={{ position: "relative" }}>
                 <Link
                   href={cover}
                   target="_blank"
@@ -233,7 +241,7 @@ function Main() {
                     alt="nextui logo"
                     radius="sm"
                     src={cover as string}
-                    width={800}
+                    width={775}
                     isBlurred
                   />
                 </Link>
@@ -277,10 +285,16 @@ function Main() {
                 fontSize: "32px",
                 fontWeight: "bold",
               }}
+              className="animate__animated animate__bounceIn"
             >
               {title}
             </div>
-            <div style={{ textAlign: "center" }}>{artist}</div>
+            <div
+              style={{ textAlign: "center" }}
+              className="animate__animated animate__fadeInDown"
+            >
+              {artist}
+            </div>
           </CardBody>
           <Divider />
           <CardFooter>
