@@ -1,0 +1,11 @@
+.bg {
+  position: fixed;
+  top: -10;
+  left: -10;
+  height: 110%;
+  width: 110%;
+  background-position: center;
+  background-size: cover;
+  filter: blur(30px);
+  -webkit-filter: blur(30px);
+}
