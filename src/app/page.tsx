@@ -13,8 +13,17 @@ import {
   Spinner,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
+import { Suspense } from "react";
 
 export default function Home() {
+  return (
+    <Suspense>
+      <Main />
+    </Suspense>
+  );
+}
+
+function Main() {
   const searchParams = useSearchParams();
   const title = searchParams.get("tr");
   const artist = searchParams.get("ar");
