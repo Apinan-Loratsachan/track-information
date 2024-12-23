@@ -74,15 +74,19 @@ function Main() {
   const [alertMessage, setAlertMessage] = React.useState("");
 
   const alertTimeout = React.useRef<number | null>(null);
+  const alertAnimateTimeout = React.useRef<number | null>(null);
   const displayAlert = () => {
     if (alertTimeout.current) {
       clearTimeout(alertTimeout.current);
+    }
+    if (alertAnimateTimeout.current) {
+      clearTimeout(alertAnimateTimeout.current);
     }
     setAlertClass("animate__fadeInUp");
     setIsVisible(true);
     alertTimeout.current = window.setTimeout(() => {
       setAlertClass("animate__fadeOutDown");
-      setTimeout(() => {
+      alertAnimateTimeout.current = window.setTimeout(() => {
         setIsVisible(false);
       }, 500);
     }, 3000);
