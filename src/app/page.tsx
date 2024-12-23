@@ -14,6 +14,7 @@ import {
   Popover,
   PopoverTrigger,
   PopoverContent,
+  Alert,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { Suspense } from "react";
@@ -21,6 +22,7 @@ import SearchCard from "../components/search-card";
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 import NoSsr from "../components/no-ssr";
+import React from "react";
 
 const BackgroundOverlay = dynamic(
   () => import("../components/background-overlay"),
@@ -65,6 +67,30 @@ function Main() {
 
   const { setTheme, theme } = useTheme();
   const isDarkMode = typeof window !== "undefined" ? theme === "dark" : false;
+
+  const [isVisible, setIsVisible] = React.useState(false);
+  const [alertClass, setAlertClass] = React.useState("aminimate__fadeInUp");
+  const [alertTitle, setAlertTitle] = React.useState("");
+  const [alertMessage, setAlertMessage] = React.useState("");
+
+  const alertTimeout = React.useRef<number | null>(null);
+  const displayAlert = () => {
+    if (alertTimeout.current) {
+      clearTimeout(alertTimeout.current);
+    }
+    setAlertClass("animate__fadeInUp");
+    setIsVisible(true);
+    alertTimeout.current = window.setTimeout(() => {
+      setAlertClass("animate__fadeOutDown");
+      setTimeout(() => {
+        setIsVisible(false);
+      }, 500);
+    }, 3000);
+  };
+
+  const atitle = "Success Notification";
+  const description =
+    "Your action has been completed successfully. We'll notify you when updates are available.";
 
   let splitRelated = (related as string).split(";").map((id) => id.trim());
   const artistArray = artist
@@ -272,6 +298,22 @@ function Main() {
           <BackgroundOverlay isDarkMode={isDarkMode} />
         </div>
       ) : null}
+      <div className="flex flex-col gap-4">
+        {isVisible ? (
+          <div
+            className={`alert animate__animated ${alertClass} animate__faster`}
+          >
+            <Alert
+              color="success"
+              description={alertMessage}
+              isVisible={isVisible}
+              title={`Copied ${alertTitle}`}
+              variant="faded"
+              onClose={() => setIsVisible(false)}
+            />
+          </div>
+        ) : null}
+      </div>
       {spotifyEmbed ? (
         <div
           id="spotify-embed"
@@ -406,11 +448,9 @@ function Main() {
                           color="primary"
                           onPress={(event) => {
                             navigator.clipboard.writeText(title as string);
-                            const button = event.target as HTMLButtonElement;
-                            button.innerText = "Copied";
-                            setTimeout(() => {
-                              button.innerText = "Copy";
-                            }, 1000);
+                            displayAlert();
+                            setAlertTitle("Title");
+                            setAlertMessage(title);
                           }}
                         >
                           Copy
@@ -434,11 +474,9 @@ function Main() {
                             color="primary"
                             onPress={(event) => {
                               navigator.clipboard.writeText(artist as string);
-                              const button = event.target as HTMLButtonElement;
-                              button.innerText = "Copied";
-                              setTimeout(() => {
-                                button.innerText = "Copy";
-                              }, 1000);
+                              displayAlert();
+                              setAlertTitle("Artist");
+                              setAlertMessage(artist);
                             }}
                           >
                             Copy
@@ -496,11 +534,9 @@ function Main() {
                           color="primary"
                           onPress={(event) => {
                             navigator.clipboard.writeText(album as string);
-                            const button = event.target as HTMLButtonElement;
-                            button.innerText = "Copied";
-                            setTimeout(() => {
-                              button.innerText = "Copy";
-                            }, 1000);
+                            displayAlert();
+                            setAlertTitle("Album");
+                            setAlertMessage(album);
                           }}
                         >
                           Copy
@@ -532,11 +568,13 @@ function Main() {
                         <td>Album Artist</td>
                         <td>
                           <Link
-                            href={"https://www.google.com/search?q=" + artist}
+                            href={
+                              "https://www.google.com/search?q=" + albumArtist
+                            }
                             target="_blank"
                             underline="hover"
                           >
-                            {artist}
+                            {albumArtist}
                           </Link>
                         </td>
                         <td>
@@ -546,11 +584,9 @@ function Main() {
                               navigator.clipboard.writeText(
                                 albumArtist as string
                               );
-                              const button = event.target as HTMLButtonElement;
-                              button.innerText = "Copied";
-                              setTimeout(() => {
-                                button.innerText = "Copy";
-                              }, 1000);
+                              displayAlert();
+                              setAlertTitle("Album Artist");
+                              setAlertMessage(albumArtist);
                             }}
                           >
                             Copy

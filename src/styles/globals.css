@@ -8,3 +8,12 @@ body {
   background-position: center;
   background-attachment: fixed;
 }
+
+.alert {
+  position: fixed;
+  bottom: 5%;
+  left: 10%;
+  right: 10%;
+  margin: auto;
+  z-index: 1;
+}
