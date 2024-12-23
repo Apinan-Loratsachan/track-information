@@ -12,6 +12,7 @@ import clsx from "clsx";
 
 import { Providers } from "./providers";
 import { fontSans } from "@/src/config/fonts";
+import { ThemeSwitch } from "../components/theme-switch";
 
 export const metadata: Metadata = {
   title: {
@@ -53,6 +54,7 @@ export default function RootLayout({
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
           <div style={{ background: "transparent" }}>
+            <ThemeSwitch />
             <div style={{ padding: "50px 0" }}>{children}</div>
           </div>
         </Providers>

@@ -10,3 +10,15 @@
   -webkit-filter: blur(30px);
   transition: all 1s ease-in-out;
 }
+
+.overlay {
+  position: fixed;
+  top: -50px;
+  left: -50px;
+  height: 110%;
+  width: 110%;
+  background-color: black;
+  background-position: center;
+  opacity: 0.5;
+  transition: all .5s ease-in-out;
+}

@@ -18,6 +18,14 @@ import {
 import { useEffect, useState } from "react";
 import { Suspense } from "react";
 import SearchCard from "../components/search-card";
+import { useTheme } from "next-themes";
+import dynamic from "next/dynamic";
+import NoSsr from "../components/no-ssr";
+
+const BackgroundOverlay = dynamic(
+  () => import("../components/background-overlay"),
+  { ssr: false }
+);
 
 export default function Home() {
   return (
@@ -54,6 +62,9 @@ function Main() {
   const [spotifyEmbed, setSpotifyEmbed] = useState<string>("");
   const [spotifyEmbedOpacity, setSpotifyEmbedOpacity] = useState<number>(0);
   const [searchWarning, setSearchWarning] = useState<boolean>(false);
+
+  const { setTheme, theme } = useTheme();
+  const isDarkMode = typeof window !== "undefined" ? theme === "dark" : false;
 
   let splitRelated = (related as string).split(";").map((id) => id.trim());
   const artistArray = artist
@@ -252,11 +263,14 @@ function Main() {
   return (
     <div style={{ padding: "0 20px" }}>
       {background != "" || background != null ? (
-        <div
-          id="background"
-          className="bg animate__animated animate__fadeIn animate__delay-1s"
-          style={{ backgroundImage: background as string }}
-        />
+        <div>
+          <div
+            id="background"
+            className="bg animate__animated animate__fadeIn animate__delay-1s"
+            style={{ backgroundImage: background as string }}
+          />
+          <BackgroundOverlay isDarkMode={isDarkMode} />
+        </div>
       ) : null}
       {spotifyEmbed ? (
         <div
@@ -275,6 +289,7 @@ function Main() {
             src={spotifyEmbed}
             height={"152px"}
             allow="encrypted-media"
+            style={{ borderRadius: "15px" }}
           />
         </div>
       ) : null}
@@ -286,131 +301,111 @@ function Main() {
           transition: "all .5s ease-in-out",
         }}
       >
-        <Card
-          className="max-w-[400px]"
-          isBlurred
-          shadow="lg"
-          radius="lg"
-          style={{ overflow: "hidden" }}
-        >
-          <CardHeader className="flex gap-3 justify-center">
-            {cover ? (
-              <div
-                style={{ position: "relative" }}
-                className="animate__animated animate__zoomInDown"
-              >
-                <Link href={cover} target="_blank">
-                  <Image
-                    id="album-cover"
-                    alt="cover"
-                    radius="sm"
-                    src={cover as string}
-                    width={775}
-                    isBlurred
-                  />
-                </Link>
-                {searchWarning ? (
-                  <div
-                    style={{
-                      position: "absolute",
-                      right: 10,
-                      bottom: 0,
-                      zIndex: 50,
-                    }}
-                    className="animate__animated animate__fadeIn animate__delay-1s"
-                  >
-                    <Popover placement="left" showArrow>
-                      <PopoverTrigger>
-                        <Button isIconOnly>
-                          <i className="fa-solid fa-circle-info fa-2xl" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent>
-                        <div className="px-1 py-2">
-                          <div className="text-small font-bold">Warning</div>
-                          <div className="text-tiny">
-                            This cover is from a search result. It may not be
-                            the actual cover of the album.
+        <NoSsr>
+          <Card
+            className="max-w-[400px]"
+            isBlurred
+            shadow="lg"
+            radius="lg"
+            style={{
+              overflow: "hidden",
+              backgroundColor: isDarkMode
+                ? "hsla(0,0%,0%,.8)"
+                : "hsla(0,0%,100%,.8)",
+            }}
+          >
+            <CardHeader className="flex gap-3 justify-center">
+              {cover ? (
+                <div
+                  style={{ position: "relative" }}
+                  className="animate__animated animate__zoomInDown"
+                >
+                  <Link href={cover} target="_blank">
+                    <Image
+                      id="album-cover"
+                      alt="cover"
+                      radius="sm"
+                      src={cover as string}
+                      width={775}
+                      isBlurred
+                    />
+                  </Link>
+                  {searchWarning ? (
+                    <div
+                      style={{
+                        position: "absolute",
+                        right: 10,
+                        bottom: 0,
+                        zIndex: 50,
+                      }}
+                      className="animate__animated animate__fadeIn animate__delay-1s"
+                    >
+                      <Popover placement="left" showArrow>
+                        <PopoverTrigger>
+                          <Button isIconOnly>
+                            <i className="fa-solid fa-circle-info fa-2xl" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent>
+                          <div className="px-1 py-2">
+                            <div className="text-small font-bold">Warning</div>
+                            <div className="text-tiny">
+                              This cover is from a search result. It may not be
+                              the actual cover of the album.
+                            </div>
                           </div>
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                  </div>
-                ) : null}
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                  ) : null}
+                </div>
+              ) : (
+                <Spinner size="lg" />
+              )}
+            </CardHeader>
+            {/* <Divider /> */}
+            <CardBody style={{ overflow: "hidden" }}>
+              <div
+                style={{
+                  textAlign: "center",
+                  fontSize: "32px",
+                  fontWeight: "bold",
+                  overflow: "hidden",
+                }}
+                className="animate__animated animate__bounceIn delay-025"
+              >
+                {title}
               </div>
-            ) : (
-              <Spinner size="lg" />
-            )}
-          </CardHeader>
-          {/* <Divider /> */}
-          <CardBody style={{ overflow: "hidden" }}>
-            <div
-              style={{
-                textAlign: "center",
-                fontSize: "32px",
-                fontWeight: "bold",
-                overflow: "hidden",
-              }}
-              className="animate__animated animate__bounceIn delay-025"
-            >
-              {title}
+              <div
+                style={{ textAlign: "center", overflow: "hidden" }}
+                className="animate__animated animate__fadeInDown delay-075"
+              >
+                {artist}
+              </div>
+            </CardBody>
+            <div className="px-3">
+              <Divider />
             </div>
-            <div
-              style={{ textAlign: "center", overflow: "hidden" }}
-              className="animate__animated animate__fadeInDown delay-075"
-            >
-              {artist}
-            </div>
-          </CardBody>
-          <div className="px-3">
-            <Divider />
-          </div>
-          <CardFooter>
-            <div className="w-full">
-              <table id="meta-table">
-                <tbody>
-                  <tr>
-                    <td>Title</td>
-                    <td>
-                      <Link
-                        href={"https://www.google.com/search?q=" + title}
-                        target="_blank"
-                      >
-                        {title}
-                      </Link>
-                    </td>
-                    <td>
-                      <Button
-                        color="primary"
-                        onPress={(event) => {
-                          navigator.clipboard.writeText(title as string);
-                          const button = event.target as HTMLButtonElement;
-                          button.innerText = "Copied";
-                          setTimeout(() => {
-                            button.innerText = "Copy";
-                          }, 1000);
-                        }}
-                      >
-                        Copy
-                      </Button>
-                    </td>
-                  </tr>
-                  {artist != "Various Artists" ? (
+            <CardFooter>
+              <div className="w-full">
+                <table id="meta-table">
+                  <tbody>
                     <tr>
-                      <td>Artist</td>
+                      <td>Title</td>
                       <td>
                         <Link
-                          href={"https://www.google.com/search?q=" + artist}
+                          href={"https://www.google.com/search?q=" + title}
                           target="_blank"
+                          underline="hover"
                         >
-                          {artist}
+                          {title}
                         </Link>
                       </td>
                       <td>
                         <Button
                           color="primary"
                           onPress={(event) => {
-                            navigator.clipboard.writeText(artist as string);
+                            navigator.clipboard.writeText(title as string);
                             const button = event.target as HTMLButtonElement;
                             button.innerText = "Copied";
                             setTimeout(() => {
@@ -422,104 +417,85 @@ function Main() {
                         </Button>
                       </td>
                     </tr>
-                  ) : (
-                    <tr>
-                      <td>Artist</td>
-                      <td>{artist}</td>
-                      <td>
-                        <Button
-                          color="default"
-                          disabled
-                          style={{ pointerEvents: "none" }}
-                        >
-                          Copy
-                        </Button>
-                      </td>
-                    </tr>
-                  )}
-                  {artistArray.length > 1 ? (
-                    <tr className="alt-row">
-                      <td>└─ &nbsp; Contain Artists</td>
-                      <td colSpan={2}>
-                        {artistArray.map((item, index) => (
-                          <span key={index}>
-                            <Link
-                              className="alt-row"
-                              href={"https://www.google.com/search?q=" + item}
-                              target="_blank"
-                              underline="hover"
-                            >
-                              {item}
-                            </Link>
-                            {index !== artistArray.length - 1 ? ", " : ""}
-                          </span>
-                        ))}
-                      </td>
-                    </tr>
-                  ) : null}
-                  <tr>
-                    <td>Album</td>
-                    <td>
-                      <Link
-                        href={"https://www.google.com/search?q=" + album}
-                        target="_blank"
-                      >
-                        {album}
-                      </Link>
-                    </td>
-                    <td>
-                      <Button
-                        color="primary"
-                        onPress={(event) => {
-                          navigator.clipboard.writeText(album as string);
-                          const button = event.target as HTMLButtonElement;
-                          button.innerText = "Copied";
-                          setTimeout(() => {
-                            button.innerText = "Copy";
-                          }, 1000);
-                        }}
-                      >
-                        Copy
-                      </Button>
-                    </td>
-                  </tr>
-                  {albumData != null ? (
-                    albumData.name.toLowerCase() != album.toLowerCase() ? (
-                      <tr className="alt-row">
-                        <td>└─ &nbsp; Alt Album Name</td>
-                        <td colSpan={2}>
+                    {artist != "Various Artists" ? (
+                      <tr>
+                        <td>Artist</td>
+                        <td>
                           <Link
-                            className="alt-row"
-                            href={
-                              "https://www.google.com/search?q=" +
-                              albumData.name
-                            }
-                            target={"_blank"}
+                            href={"https://www.google.com/search?q=" + artist}
+                            target="_blank"
+                            underline="hover"
                           >
-                            {albumData.name}
+                            {artist}
                           </Link>
                         </td>
+                        <td>
+                          <Button
+                            color="primary"
+                            onPress={(event) => {
+                              navigator.clipboard.writeText(artist as string);
+                              const button = event.target as HTMLButtonElement;
+                              button.innerText = "Copied";
+                              setTimeout(() => {
+                                button.innerText = "Copy";
+                              }, 1000);
+                            }}
+                          >
+                            Copy
+                          </Button>
+                        </td>
                       </tr>
-                    ) : null
-                  ) : null}
-                  {albumArtist != "Various Artists" ? (
+                    ) : (
+                      <tr>
+                        <td>Artist</td>
+                        <td>{artist}</td>
+                        <td>
+                          <Button
+                            color="default"
+                            disabled
+                            style={{ pointerEvents: "none" }}
+                          >
+                            Copy
+                          </Button>
+                        </td>
+                      </tr>
+                    )}
+                    {artistArray.length > 1 ? (
+                      <tr className="alt-row">
+                        <td>└─ &nbsp; Contain Artists</td>
+                        <td colSpan={2}>
+                          {artistArray.map((item, index) => (
+                            <span key={index}>
+                              <Link
+                                className="alt-row"
+                                href={"https://www.google.com/search?q=" + item}
+                                target="_blank"
+                                underline="hover"
+                              >
+                                {item}
+                              </Link>
+                              {index !== artistArray.length - 1 ? ", " : ""}
+                            </span>
+                          ))}
+                        </td>
+                      </tr>
+                    ) : null}
                     <tr>
-                      <td>Album Artist</td>
+                      <td>Album</td>
                       <td>
                         <Link
-                          href={"https://www.google.com/search?q=" + artist}
+                          href={"https://www.google.com/search?q=" + album}
                           target="_blank"
+                          underline="hover"
                         >
-                          {artist}
+                          {album}
                         </Link>
                       </td>
                       <td>
                         <Button
                           color="primary"
                           onPress={(event) => {
-                            navigator.clipboard.writeText(
-                              albumArtist as string
-                            );
+                            navigator.clipboard.writeText(album as string);
                             const button = event.target as HTMLButtonElement;
                             button.innerText = "Copied";
                             setTimeout(() => {
@@ -531,112 +507,180 @@ function Main() {
                         </Button>
                       </td>
                     </tr>
-                  ) : (
+                    {albumData != null ? (
+                      albumData.name.toLowerCase() != album.toLowerCase() ? (
+                        <tr className="alt-row">
+                          <td>└─ &nbsp; Alt Album Name</td>
+                          <td colSpan={2}>
+                            <Link
+                              className="alt-row"
+                              href={
+                                "https://www.google.com/search?q=" +
+                                albumData.name
+                              }
+                              target={"_blank"}
+                              underline="hover"
+                            >
+                              {albumData.name}
+                            </Link>
+                          </td>
+                        </tr>
+                      ) : null
+                    ) : null}
+                    {albumArtist != "Various Artists" ? (
+                      <tr>
+                        <td>Album Artist</td>
+                        <td>
+                          <Link
+                            href={"https://www.google.com/search?q=" + artist}
+                            target="_blank"
+                            underline="hover"
+                          >
+                            {artist}
+                          </Link>
+                        </td>
+                        <td>
+                          <Button
+                            color="primary"
+                            onPress={(event) => {
+                              navigator.clipboard.writeText(
+                                albumArtist as string
+                              );
+                              const button = event.target as HTMLButtonElement;
+                              button.innerText = "Copied";
+                              setTimeout(() => {
+                                button.innerText = "Copy";
+                              }, 1000);
+                            }}
+                          >
+                            Copy
+                          </Button>
+                        </td>
+                      </tr>
+                    ) : (
+                      <tr>
+                        <td>Album Artist</td>
+                        <td>{albumArtist}</td>
+                        <td>
+                          <Button
+                            color="default"
+                            disabled
+                            style={{ pointerEvents: "none" }}
+                          >
+                            Copy
+                          </Button>
+                        </td>
+                      </tr>
+                    )}
                     <tr>
-                      <td>Album Artist</td>
-                      <td>{albumArtist}</td>
-                      <td>
-                        <Button
-                          color="default"
-                          disabled
-                          style={{ pointerEvents: "none" }}
-                        >
-                          Copy
-                        </Button>
+                      <td>Disc</td>
+                      <td colSpan={2}>
+                        {`${discNumber == 0 ? "Unknown" : discNumber}/${
+                          discCount == 0 ? "Unknown" : discCount
+                        }`}
                       </td>
                     </tr>
-                  )}
-                  <tr>
-                    <td>Disc</td>
-                    <td colSpan={2}>
-                      {`${discNumber == 0 ? "Unknown" : discNumber}/${
-                        discCount == 0 ? "Unknown" : discCount
-                      }`}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Track</td>
-                    <td
-                      colSpan={2}
-                    >{`${trackNumber == 0 ? "Unknown" : trackNumber}/${trackCount == 0 ? "Unknown" : trackCount}`}</td>
-                  </tr>
-                  <tr>
-                    <td>Length</td>
-                    <td colSpan={2}>{length}</td>
-                  </tr>
-                  <tr>
-                    <td>Genre</td>
-                    <td colSpan={2}>{genre}</td>
-                  </tr>
-                  <tr>
-                    <td>Year</td>
-                    <td colSpan={2}>{year}</td>
-                  </tr>
-                  <tr>
-                    <td>Language</td>
-                    <td colSpan={2}>{language}</td>
-                  </tr>
-                  <tr>
-                    <td>Related</td>
-                    <td colSpan={2}>
-                      {splitRelated.map((relatedItem, index) => (
-                        <span key={index}>
+                    <tr>
+                      <td>Track</td>
+                      <td
+                        colSpan={2}
+                      >{`${trackNumber == 0 ? "Unknown" : trackNumber}/${trackCount == 0 ? "Unknown" : trackCount}`}</td>
+                    </tr>
+                    <tr>
+                      <td>Length</td>
+                      <td colSpan={2}>{length}</td>
+                    </tr>
+                    <tr>
+                      <td>Genre</td>
+                      <td colSpan={2}>{genre}</td>
+                    </tr>
+                    <tr>
+                      <td>Year</td>
+                      <td colSpan={2}>{year}</td>
+                    </tr>
+                    <tr>
+                      <td>Language</td>
+                      <td colSpan={2}>{language}</td>
+                    </tr>
+                    <tr>
+                      <td>Related</td>
+                      <td colSpan={2}>
+                        {(splitRelated.length > 1 &&
+                          splitRelated.map((relatedItem, index) => (
+                            <span key={index}>
+                              <Link
+                                href={
+                                  "https://www.google.com/search?q=" +
+                                  relatedItem
+                                }
+                                target="_blank"
+                                underline="hover"
+                              >
+                                #{relatedItem}
+                              </Link>
+                              {index < splitRelated.length - 1 &&
+                                "\u00A0\u00A0\u00A0"}
+                            </span>
+                          ))) ||
+                        splitRelated[0] === "" ? (
+                          "None"
+                        ) : (
                           <Link
                             href={
-                              "https://www.google.com/search?q=" + relatedItem
+                              "https://www.google.com/search?q=" +
+                              splitRelated[0]
                             }
                             target="_blank"
+                            underline="hover"
                           >
-                            #{relatedItem}
+                            #{splitRelated[0]}
                           </Link>
-                          {index < splitRelated.length - 1 &&
-                            "\u00A0\u00A0\u00A0"}
-                        </span>
-                      ))}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <div className="py-4">
-                <Divider />
+                        )}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div className="py-4">
+                  <Divider />
+                </div>
+                <div className="flex flex-wrap justify-center">
+                  <SearchCard
+                    searchProvider="Google"
+                    image="/google.jpg"
+                    padding="0px"
+                    textWhite={false}
+                    track={title + " " + artist}
+                    trackURL="https://www.google.com/search?q="
+                  ></SearchCard>
+                  <SearchCard
+                    searchProvider="YouTube"
+                    image="/youtube.jpg"
+                    padding="0px"
+                    textWhite={false}
+                    track={title + " " + artist}
+                    trackURL="https://www.youtube.com/results?search_query="
+                  ></SearchCard>
+                  <SearchCard
+                    searchProvider="Spotify"
+                    image="/spotify.jpg"
+                    padding="0px"
+                    textWhite={true}
+                    track={title + " " + artist}
+                    trackURL="https://open.spotify.com/search/"
+                  ></SearchCard>
+                  <SearchCard
+                    searchProvider="Apple Music"
+                    image="/apple_music.jpg"
+                    padding="0px"
+                    textWhite={true}
+                    track={title + " " + artist}
+                    trackURL="https://music.apple.com/search?term="
+                  />
+                </div>
               </div>
-              <div className="flex flex-wrap justify-center">
-                <SearchCard
-                  searchProvider="Google"
-                  image="/google.jpg"
-                  padding="0px"
-                  textWhite={false}
-                  track={title + " " + artist}
-                  trackURL="https://www.google.com/search?q="
-                ></SearchCard>
-                <SearchCard
-                  searchProvider="YouTube"
-                  image="/youtube.jpg"
-                  padding="0px"
-                  textWhite={false}
-                  track={title + " " + artist}
-                  trackURL="https://www.youtube.com/results?search_query="
-                ></SearchCard>
-                <SearchCard
-                  searchProvider="Spotify"
-                  image="/spotify.jpg"
-                  padding="0px"
-                  textWhite={true}
-                  track={title + " " + artist}
-                  trackURL="https://open.spotify.com/search/"
-                ></SearchCard>
-                <SearchCard
-                  searchProvider="Apple Music"
-                  image="/apple_music.jpg"
-                  padding="0px"
-                  textWhite={true}
-                  track={title + " " + artist}
-                  trackURL="https://music.apple.com/search?term="
-                />
-              </div>
-            </div>
-          </CardFooter>
-        </Card>
+            </CardFooter>
+          </Card>
+        </NoSsr>
       </div>
     </div>
   );
