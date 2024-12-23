@@ -29,7 +29,174 @@ export default function Home() {
 
 function Main() {
   const searchParams = useSearchParams();
-  console.log(searchParams.get("tr"));
+  const title = searchParams.get("tr") || "Unknown";
+  const artist = searchParams.get("ar") || "Unknown";
+  const album = searchParams.get("al") || "Unknown";
+  const albumArtist = searchParams.get("alar") || "Unknown";
+  const trackNumber = parseInt(searchParams.get("tn") || "0");
+  const trackCount = parseInt(searchParams.get("tc") || "0");
+  const discNumber = parseInt(searchParams.get("dn") || "0");
+  const discCount = parseInt(searchParams.get("dc") || "0");
+  const length = searchParams.get("len") || "Unknown";
+  const genre = searchParams.get("ge") || "Unknown";
+  const year = searchParams.get("y") || "Unknown";
+  const language = searchParams.get("lang") || "Unknown";
+  const related = searchParams.get("rel") || "";
+  const customAlbumCover = searchParams.get("cti");
+  const spotifyAlbumId = searchParams.get("aref");
+  const spotifyTrackId = searchParams.get("tref");
+  const spotifyCoverId = searchParams.get("cref");
+
+  const [albumData, setAlbumData] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [cover, setCover] = useState<string | null>(null);
+  const [background, setBackground] = useState<string | null>(null);
+  const [spotifyEmbed, setSpotifyEmbed] = useState<string>("");
+  const [spotifyEmbedOpacity, setSpotifyEmbedOpacity] = useState<number>(0);
+  const [searchWarning, setSearchWarning] = useState<boolean>(false);
+
+  let splitRelated = (related as string).split(";").map((id) => id.trim());
+  const artistArray = artist
+    .split(
+      /(?:feat\.|meets|×|with|cv\.|Cv\.|CV\.|cv:|Cv:|CV:|cv |Cv |CV |va\.|Va\.|VA\.|va:|Va:|VA:|va |Va |VA |vo\.|Vo\.|VO\.|vo:|Vo:|VO:|vo |Vo |VO |&|\(\s*|\s*\)|\[|\]|,)/g
+    )
+    .filter((artist) => artist.trim() !== "")
+    .map((artist) => artist.trim());
+
+  useEffect(() => {
+    const fetchAlbumData = async () => {
+      if ((spotifyAlbumId as string) !== "") {
+        try {
+          const response = await fetch(
+            `/api/spotify/getAlbumData?spotifyAlbumId=${spotifyAlbumId}`
+          );
+          if (!response.ok) {
+            throw new Error("Failed to fetch album data");
+          }
+
+          const data = await response.json();
+          setAlbumData(data);
+
+          // Set background image
+          const bg = document.getElementById("background") as HTMLDivElement;
+
+          // Set favicon
+          const favicon = document.createElement("link");
+          favicon.rel = "icon";
+          favicon.type = "image/x-icon";
+
+          // Set the cover based on customAlbumCover or albumData
+          console.log(customAlbumCover);
+          if (customAlbumCover) {
+            console.log;
+            setCover(customAlbumCover);
+            favicon.href = customAlbumCover;
+            setBackground(`url(${customAlbumCover})`);
+          } else if (data?.images?.[0]?.url) {
+            setCover(data.images[0].url);
+            favicon.href = data.images[0].url;
+            setBackground(`url(${data.images[0].url})`);
+          }
+
+          document.head.appendChild(favicon);
+
+          if (discCount != 1) {
+            let trackData;
+            for (let i = 0; i <= data.tracks.items.length - 1; i++) {
+              if (
+                data.tracks.items[i].disc_number == discNumber &&
+                data.tracks.items[i].track_number == trackNumber
+              ) {
+                trackData = data.tracks.items[i];
+                setSpotifyEmbed(
+                  `https://open.spotify.com/embed/track/${trackData.id}`
+                );
+                setTimeout(() => {
+                  setSpotifyEmbedOpacity(1);
+                }, 1000);
+              }
+            }
+          } else {
+            setSpotifyEmbed(
+              `https://open.spotify.com/embed/track/${data.tracks.items[trackNumber - 1].id}`
+            );
+            setTimeout(() => {
+              setSpotifyEmbedOpacity(1);
+            }, 1000);
+          }
+        } catch (err: any) {
+          setError(err.message);
+        }
+      } else if (customAlbumCover) {
+        setCover(customAlbumCover);
+        const favicon = document.createElement("link");
+        favicon.rel = "icon";
+        favicon.type = "image/x-icon";
+        favicon.href = customAlbumCover;
+        document.head.appendChild(favicon);
+        const bg = document.getElementById("background") as HTMLDivElement;
+        setBackground(`url(${customAlbumCover})`);
+      } else if ((spotifyCoverId as string) !== "") {
+        try {
+          const response = await fetch(
+            `/api/spotify/getAlbumData?spotifyAlbumId=${spotifyCoverId}`
+          );
+          if (!response.ok) {
+            throw new Error("Failed to fetch album data");
+          }
+
+          const data = await response.json();
+          console.log(data);
+          setAlbumData(data);
+
+          // Set favicon
+          const favicon = document.createElement("link");
+          favicon.rel = "icon";
+          favicon.type = "image/x-icon";
+          favicon.href = data.images[0].url; // Replace with your favicon URL
+          document.head.appendChild(favicon);
+          setCover(data.images[0].url);
+
+          // Set background image
+          const bg = document.getElementById("background") as HTMLDivElement;
+          setBackground(`url(${data.images[0].url})`);
+        } catch (err: any) {
+          setError(err.message);
+        }
+      } else {
+        const response = await fetch(
+          `/api/spotify/search?search=${album} ${albumArtist}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch album data");
+        }
+        const data = await response.json();
+        console.log(data);
+        setAlbumData(data);
+        setCover(data.albums.items[0].images[0].url);
+        const favicon = document.createElement("link");
+        favicon.rel = "icon";
+        favicon.type = "image/x-icon";
+        favicon.href = data.albums.items[0].images[0].url; // Replace with your favicon URL
+        document.head.appendChild(favicon);
+        const bg = document.getElementById("background") as HTMLDivElement;
+        setBackground(`url(${data.albums.items[0].images[0].url})`);
+        setSearchWarning(true);
+      }
+
+      if ((spotifyTrackId as string) !== "") {
+        setSpotifyEmbed(
+          `https://open.spotify.com/embed/track/${spotifyTrackId}`
+        );
+        setTimeout(() => {
+          setSpotifyEmbedOpacity(1);
+        }, 1000);
+      }
+      console.log(albumData);
+    };
+
+    fetchAlbumData();
+  }, [spotifyAlbumId, customAlbumCover, spotifyEmbedOpacity]);
 
   if (
     searchParams.get("tr") === null ||
@@ -81,132 +248,6 @@ function Main() {
       </div>
     );
   }
-
-  const title = searchParams.get("tr") || "Unknown";
-  const artist = searchParams.get("ar") || "Unknown";
-  const album = searchParams.get("al") || "Unknown";
-  const albumArtist = searchParams.get("alar") || "Unknown";
-  const trackNumber = parseInt(searchParams.get("tn") || "0");
-  const trackCount = parseInt(searchParams.get("tc") || "0");
-  const discNumber = parseInt(searchParams.get("dn") || "0");
-  const discCount = parseInt(searchParams.get("dc") || "0");
-  const length = searchParams.get("len") || "Unknown";
-  const genre = searchParams.get("ge") || "Unknown";
-  const year = searchParams.get("y") || "Unknown";
-  const language = searchParams.get("lang") || "Unknown";
-  const related = searchParams.get("rel") || "";
-  const customAlbumCover = searchParams.get("cti");
-  const spotifyAlbumId = searchParams.get("aref");
-  const spotifyTrackId = searchParams.get("tref");
-  const spotifyCoverId = searchParams.get("cref");
-
-  const [albumData, setAlbumData] = useState<any>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [cover, setCover] = useState<string | null>(null);
-  const [background, setBackground] = useState<string | null>(null);
-  const [spotifyEmbed, setSpotifyEmbed] = useState<string>("");
-  const [spotifyEmbedOpacity, setSpotifyEmbedOpacity] = useState<number>(0);
-  const [searchWarning, setSearchWarning] = useState<boolean>(false);
-
-  let splitRelated = (related as string).split(";").map((id) => id.trim());
-  const artistArray = artist
-    .split(
-      /(?:feat\.|meets|×|with|cv\.|Cv\.|CV\.|cv:|Cv:|CV:|cv |Cv |CV |va\.|Va\.|VA\.|va:|Va:|VA:|va |Va |VA |vo\.|Vo\.|VO\.|vo:|Vo:|VO:|vo |Vo |VO |&|\(\s*|\s*\)|\[|\]|,)/g
-    )
-    .filter((artist) => artist.trim() !== "")
-    .map((artist) => artist.trim());
-
-  useEffect(() => {
-    const fetchAlbumData = async () => {
-      try {
-        let data;
-        let albumCoverUrl = "";
-        let faviconUrl = "";
-
-        if (spotifyAlbumId) {
-          const response = await fetch(
-            `/api/spotify/getAlbumData?spotifyAlbumId=${spotifyAlbumId}`
-          );
-          if (!response.ok) throw new Error("Failed to fetch album data");
-          data = await response.json();
-          setAlbumData(data);
-          albumCoverUrl = customAlbumCover || data.images?.[0]?.url || "";
-          faviconUrl = albumCoverUrl;
-        } else if (customAlbumCover) {
-          albumCoverUrl = customAlbumCover;
-          faviconUrl = customAlbumCover;
-        } else if (spotifyCoverId) {
-          const response = await fetch(
-            `/api/spotify/getAlbumData?spotifyAlbumId=${spotifyCoverId}`
-          );
-          if (!response.ok) throw new Error("Failed to fetch album data");
-          data = await response.json();
-          setAlbumData(data);
-          albumCoverUrl = data.images?.[0]?.url || "";
-          faviconUrl = albumCoverUrl;
-        } else {
-          const response = await fetch(
-            `/api/spotify/search?search=${album} ${albumArtist}`
-          );
-          if (!response.ok) throw new Error("Failed to fetch album data");
-          data = await response.json();
-          setAlbumData(data);
-          albumCoverUrl = data.albums.items?.[0]?.images?.[0]?.url || "";
-          faviconUrl = albumCoverUrl;
-          setSearchWarning(true);
-        }
-
-        // Set favicon and background
-        if (albumCoverUrl) {
-          const favicon = document.createElement("link");
-          favicon.rel = "icon";
-          favicon.type = "image/x-icon";
-          favicon.href = faviconUrl;
-          document.head.appendChild(favicon);
-
-          const bg = document.getElementById("background") as HTMLDivElement;
-          setBackground(`url(${albumCoverUrl})`);
-          setCover(albumCoverUrl);
-        }
-
-        // Spotify Embed Logic
-        if (spotifyTrackId) {
-          setSpotifyEmbed(
-            `https://open.spotify.com/embed/track/${spotifyTrackId}`
-          );
-          setTimeout(() => setSpotifyEmbedOpacity(1), 1000);
-        } else if (data?.tracks?.items?.length) {
-          const trackData =
-            discCount !== 1
-              ? data.tracks.items.find(
-                  (track: any) =>
-                    track.disc_number === discNumber &&
-                    track.track_number === trackNumber
-                )
-              : data.tracks.items[trackNumber - 1];
-          if (trackData) {
-            setSpotifyEmbed(
-              `https://open.spotify.com/embed/track/${trackData.id}`
-            );
-            setTimeout(() => setSpotifyEmbedOpacity(1), 1000);
-          }
-        }
-      } catch (err: any) {
-        setError(err.message);
-      }
-    };
-
-    fetchAlbumData();
-  }, [
-    spotifyAlbumId,
-    customAlbumCover,
-    spotifyTrackId,
-    album,
-    albumArtist,
-    discNumber,
-    trackNumber,
-    discCount,
-  ]);
 
   return (
     <div style={{ padding: "0 20px" }}>
