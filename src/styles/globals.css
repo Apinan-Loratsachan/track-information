@@ -15,5 +15,6 @@ body {
   left: 10%;
   right: 10%;
   margin: auto;
+  max-width: 780px;
   z-index: 1;
 }
