@@ -17,6 +17,7 @@ import {
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { Suspense } from "react";
+import SearchCard from "../components/search-card";
 
 export default function Home() {
   return (
@@ -28,18 +29,18 @@ export default function Home() {
 
 function Main() {
   const searchParams = useSearchParams();
-  const title = searchParams.get("tr");
-  const artist = searchParams.get("ar");
-  const album = searchParams.get("al");
-  const albumArtist = searchParams.get("alar");
+  const title = searchParams.get("tr") || "Unknown";
+  const artist = searchParams.get("ar") || "Unknown";
+  const album = searchParams.get("al") || "Unknown";
+  const albumArtist = searchParams.get("alar") || "Unknown";
   const trackNumber = parseInt(searchParams.get("tn") || "0");
   const trackCount = parseInt(searchParams.get("tc") || "0");
   const discNumber = parseInt(searchParams.get("dn") || "0");
   const discCount = parseInt(searchParams.get("dc") || "0");
-  const length = searchParams.get("len");
-  const genre = searchParams.get("ge");
-  const year = searchParams.get("y");
-  const language = searchParams.get("lang");
+  const length = searchParams.get("len") || "Unknown";
+  const genre = searchParams.get("ge") || "Unknown";
+  const year = searchParams.get("y") || "Unknown";
+  const language = searchParams.get("lang") || "Unknown";
   const related = searchParams.get("rel") || "";
   const customAlbumCover = searchParams.get("cti");
   const spotifyAlbumId = searchParams.get("aref");
@@ -298,50 +299,24 @@ function Main() {
           </CardBody>
           <Divider />
           <CardFooter>
-            <table id="meta-table">
-              <tbody>
-                <tr>
-                  <td>Title</td>
-                  <td>
-                    <Link
-                      href={"https://www.google.com/search?q=" + title}
-                      target="_blank"
-                    >
-                      {title}
-                    </Link>
-                  </td>
-                  <td>
-                    <Button
-                      color="primary"
-                      onPress={(event) => {
-                        navigator.clipboard.writeText(title as string);
-                        const button = event.target as HTMLButtonElement;
-                        button.innerText = "Copied";
-                        setTimeout(() => {
-                          button.innerText = "Copy";
-                        }, 1000);
-                      }}
-                    >
-                      Copy
-                    </Button>
-                  </td>
-                </tr>
-                {artist != "Various Artists" ? (
+            <div className="w-full">
+              <table id="meta-table">
+                <tbody>
                   <tr>
-                    <td>Artist</td>
+                    <td>Title</td>
                     <td>
                       <Link
-                        href={"https://www.google.com/search?q=" + artist}
+                        href={"https://www.google.com/search?q=" + title}
                         target="_blank"
                       >
-                        {artist}
+                        {title}
                       </Link>
                     </td>
                     <td>
                       <Button
                         color="primary"
                         onPress={(event) => {
-                          navigator.clipboard.writeText(artist as string);
+                          navigator.clipboard.writeText(title as string);
                           const button = event.target as HTMLButtonElement;
                           button.innerText = "Copied";
                           setTimeout(() => {
@@ -353,140 +328,207 @@ function Main() {
                       </Button>
                     </td>
                   </tr>
-                ) : (
-                  <tr>
-                    <td>Artist</td>
-                    <td>{artist}</td>
-                    <td>
-                      <Button
-                        color="default"
-                        disabled
-                        style={{ pointerEvents: "none" }}
-                      >
-                        Copy
-                      </Button>
-                    </td>
-                  </tr>
-                )}
-                <tr>
-                  <td>Album</td>
-                  <td>
-                    <Link
-                      href={"https://www.google.com/search?q=" + album}
-                      target="_blank"
-                    >
-                      {album}
-                    </Link>
-                  </td>
-                  <td>
-                    <Button
-                      color="primary"
-                      onPress={(event) => {
-                        navigator.clipboard.writeText(album as string);
-                        const button = event.target as HTMLButtonElement;
-                        button.innerText = "Copied";
-                        setTimeout(() => {
-                          button.innerText = "Copy";
-                        }, 1000);
-                      }}
-                    >
-                      Copy
-                    </Button>
-                  </td>
-                </tr>
-                {albumArtist != "Various Artists" ? (
-                  <tr>
-                    <td>Album Artist</td>
-                    <td>
-                      <Link
-                        href={"https://www.google.com/search?q=" + artist}
-                        target="_blank"
-                      >
-                        {artist}
-                      </Link>
-                    </td>
-                    <td>
-                      <Button
-                        color="primary"
-                        onPress={(event) => {
-                          navigator.clipboard.writeText(albumArtist as string);
-                          const button = event.target as HTMLButtonElement;
-                          button.innerText = "Copied";
-                          setTimeout(() => {
-                            button.innerText = "Copy";
-                          }, 1000);
-                        }}
-                      >
-                        Copy
-                      </Button>
-                    </td>
-                  </tr>
-                ) : (
-                  <tr>
-                    <td>Album Artist</td>
-                    <td>{albumArtist}</td>
-                    <td>
-                      <Button
-                        color="default"
-                        disabled
-                        style={{ pointerEvents: "none" }}
-                      >
-                        Copy
-                      </Button>
-                    </td>
-                  </tr>
-                )}
-                <tr>
-                  <td>Disc</td>
-                  <td colSpan={2}>
-                    {`${discNumber == 0 ? "Unknown" : discNumber}/${
-                      discCount == 0 ? "Unknown" : discCount
-                    }`}
-                  </td>
-                </tr>
-                <tr>
-                  <td>Track</td>
-                  <td
-                    colSpan={2}
-                  >{`${trackNumber == 0 ? "Unknown" : trackNumber}/${trackCount == 0 ? "Unknown" : trackCount}`}</td>
-                </tr>
-                <tr>
-                  <td>Length</td>
-                  <td colSpan={2}>{length}</td>
-                </tr>
-                <tr>
-                  <td>Genre</td>
-                  <td colSpan={2}>{genre}</td>
-                </tr>
-                <tr>
-                  <td>Year</td>
-                  <td colSpan={2}>{year}</td>
-                </tr>
-                <tr>
-                  <td>Language</td>
-                  <td colSpan={2}>{language}</td>
-                </tr>
-                <tr>
-                  <td>Related</td>
-                  <td colSpan={2}>
-                    {splitRelated.map((relatedItem, index) => (
-                      <span key={index}>
+                  {artist != "Various Artists" ? (
+                    <tr>
+                      <td>Artist</td>
+                      <td>
                         <Link
-                          href={
-                            "https://www.google.com/search?q=" + relatedItem
-                          }
+                          href={"https://www.google.com/search?q=" + artist}
                           target="_blank"
                         >
-                          #{relatedItem}
+                          {artist}
                         </Link>
-                        {index < splitRelated.length - 1 &&
-                          "\u00A0\u00A0\u00A0"}
-                      </span>
-                    ))}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+                      </td>
+                      <td>
+                        <Button
+                          color="primary"
+                          onPress={(event) => {
+                            navigator.clipboard.writeText(artist as string);
+                            const button = event.target as HTMLButtonElement;
+                            button.innerText = "Copied";
+                            setTimeout(() => {
+                              button.innerText = "Copy";
+                            }, 1000);
+                          }}
+                        >
+                          Copy
+                        </Button>
+                      </td>
+                    </tr>
+                  ) : (
+                    <tr>
+                      <td>Artist</td>
+                      <td>{artist}</td>
+                      <td>
+                        <Button
+                          color="default"
+                          disabled
+                          style={{ pointerEvents: "none" }}
+                        >
+                          Copy
+                        </Button>
+                      </td>
+                    </tr>
+                  )}
+                  <tr>
+                    <td>Album</td>
+                    <td>
+                      <Link
+                        href={"https://www.google.com/search?q=" + album}
+                        target="_blank"
+                      >
+                        {album}
+                      </Link>
+                    </td>
+                    <td>
+                      <Button
+                        color="primary"
+                        onPress={(event) => {
+                          navigator.clipboard.writeText(album as string);
+                          const button = event.target as HTMLButtonElement;
+                          button.innerText = "Copied";
+                          setTimeout(() => {
+                            button.innerText = "Copy";
+                          }, 1000);
+                        }}
+                      >
+                        Copy
+                      </Button>
+                    </td>
+                  </tr>
+                  {albumArtist != "Various Artists" ? (
+                    <tr>
+                      <td>Album Artist</td>
+                      <td>
+                        <Link
+                          href={"https://www.google.com/search?q=" + artist}
+                          target="_blank"
+                        >
+                          {artist}
+                        </Link>
+                      </td>
+                      <td>
+                        <Button
+                          color="primary"
+                          onPress={(event) => {
+                            navigator.clipboard.writeText(
+                              albumArtist as string
+                            );
+                            const button = event.target as HTMLButtonElement;
+                            button.innerText = "Copied";
+                            setTimeout(() => {
+                              button.innerText = "Copy";
+                            }, 1000);
+                          }}
+                        >
+                          Copy
+                        </Button>
+                      </td>
+                    </tr>
+                  ) : (
+                    <tr>
+                      <td>Album Artist</td>
+                      <td>{albumArtist}</td>
+                      <td>
+                        <Button
+                          color="default"
+                          disabled
+                          style={{ pointerEvents: "none" }}
+                        >
+                          Copy
+                        </Button>
+                      </td>
+                    </tr>
+                  )}
+                  <tr>
+                    <td>Disc</td>
+                    <td colSpan={2}>
+                      {`${discNumber == 0 ? "Unknown" : discNumber}/${
+                        discCount == 0 ? "Unknown" : discCount
+                      }`}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Track</td>
+                    <td
+                      colSpan={2}
+                    >{`${trackNumber == 0 ? "Unknown" : trackNumber}/${trackCount == 0 ? "Unknown" : trackCount}`}</td>
+                  </tr>
+                  <tr>
+                    <td>Length</td>
+                    <td colSpan={2}>{length}</td>
+                  </tr>
+                  <tr>
+                    <td>Genre</td>
+                    <td colSpan={2}>{genre}</td>
+                  </tr>
+                  <tr>
+                    <td>Year</td>
+                    <td colSpan={2}>{year}</td>
+                  </tr>
+                  <tr>
+                    <td>Language</td>
+                    <td colSpan={2}>{language}</td>
+                  </tr>
+                  <tr>
+                    <td>Related</td>
+                    <td colSpan={2}>
+                      {splitRelated.map((relatedItem, index) => (
+                        <span key={index}>
+                          <Link
+                            href={
+                              "https://www.google.com/search?q=" + relatedItem
+                            }
+                            target="_blank"
+                          >
+                            #{relatedItem}
+                          </Link>
+                          {index < splitRelated.length - 1 &&
+                            "\u00A0\u00A0\u00A0"}
+                        </span>
+                      ))}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <div className="py-4">
+                <Divider />
+              </div>
+              <div className="flex flex-wrap justify-center">
+                <SearchCard
+                  searchProvider="Google"
+                  image="/google.jpg"
+                  padding="0px"
+                  textWhite={false}
+                  track={title + " " + artist}
+                  trackURL="https://www.google.com/search?q="
+                ></SearchCard>
+                <SearchCard
+                  searchProvider="YouTube"
+                  image="/youtube.jpg"
+                  padding="0px"
+                  textWhite={true}
+                  track={title + " " + artist}
+                  trackURL="https://www.youtube.com/results?search_query="
+                ></SearchCard>
+                <SearchCard
+                  searchProvider="Spotify"
+                  image="/spotify.jpg"
+                  padding="0px"
+                  textWhite={true}
+                  track={title + " " + artist}
+                  trackURL="https://open.spotify.com/search/"
+                ></SearchCard>
+                <SearchCard
+                  searchProvider="Apple Music"
+                  image="/apple_music.jpg"
+                  padding="0px"
+                  textWhite={true}
+                  track={title + " " + artist}
+                  trackURL="https://music.apple.com/search?term="
+                />
+              </div>
+            </div>
           </CardFooter>
         </Card>
       </div>

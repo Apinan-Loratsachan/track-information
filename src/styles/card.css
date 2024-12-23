@@ -1,0 +1,6 @@
+.card {
+  max-width: 350px;
+  aspect-ratio: 16/9;
+  display: flex;
+  justify-content: center;
+}
