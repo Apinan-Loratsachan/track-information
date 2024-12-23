@@ -18,12 +18,11 @@ export default function SearchCard({
   textWhite: boolean;
 }) {
   return (
-    <div className="p-3" style={{ minWidth: "300px" }}>
+    <div className="card-container p-3">
       <Card
         className="card"
         isFooterBlurred
         isPressable
-        isHoverable
         shadow="lg"
         onPress={() => window.open(trackURL + track, "_blank")}
       >
