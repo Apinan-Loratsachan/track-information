@@ -232,14 +232,10 @@ function Main() {
           <CardHeader className="flex gap-3 justify-center">
             {cover ? (
               <div style={{ position: "relative" }}>
-                <Link
-                  href={cover}
-                  target="_blank"
-                  style={{ position: "relative" }}
-                >
+                <Link href={cover} target="_blank">
                   <Image
                     id="album-cover"
-                    alt="nextui logo"
+                    alt="cover"
                     radius="sm"
                     src={cover as string}
                     width={775}
@@ -278,7 +274,7 @@ function Main() {
               <Spinner size="lg" />
             )}
           </CardHeader>
-          <Divider />
+          {/* <Divider /> */}
           <CardBody>
             <div
               style={{
@@ -297,7 +293,9 @@ function Main() {
               {artist}
             </div>
           </CardBody>
-          <Divider />
+          <div className="px-3">
+            <Divider />
+          </div>
           <CardFooter>
             <div className="w-full">
               <table id="meta-table">
