@@ -24,6 +24,7 @@ export default function SearchCard({
         isFooterBlurred
         isPressable
         isHoverable
+        shadow="lg"
         onPress={() => window.open(trackURL + track, "_blank")}
       >
         <Image

@@ -1,0 +1,253 @@
+.delay-025 {
+  animation-delay: 0.25s;
+}
+
+.delay-05 {
+  animation-delay: 0.5s;
+}
+
+.delay-075 {
+  animation-delay: 0.75s;
+}
+
+.delay-10 {
+  animation-delay: 1s;
+}
+
+.delay-1-25 {
+  animation-delay: 1.25s;
+}
+
+.delay-15 {
+  animation-delay: 1.5s;
+}
+
+.delay-1-75 {
+  animation-delay: 1.75s;
+}
+
+.delay-20 {
+  animation-delay: 2s;
+}
+
+.delay-25 {
+  animation-delay: 2.5s;
+}
+
+.delay-30 {
+  animation-delay: 3s;
+}
+
+.delay-35 {
+  animation-delay: 3.5s;
+}
+
+.delay-40 {
+  animation-delay: 4s;
+}
+
+.delay-45 {
+  animation-delay: 4.5s;
+}
+
+.delay-50 {
+  animation-delay: 5s;
+}
+
+.delay-55 {
+  animation-delay: 5.5s;
+}
+
+.delay-60 {
+  animation-delay: 6s;
+}
+
+.delay-65 {
+  animation-delay: 6.5s;
+}
+
+.delay-70 {
+  animation-delay: 7s;
+}
+
+.delay-75 {
+  animation-delay: 7.5s;
+}
+
+.delay-80 {
+  animation-delay: 8s;
+}
+
+.delay-85 {
+  animation-delay: 8.5s;
+}
+
+.delay-90 {
+  animation-delay: 9s;
+}
+
+.delay-95 {
+  animation-delay: 9.5s;
+}
+
+.delay-100 {
+  animation-delay: 10s;
+}
+
+.delay-105 {
+  animation-delay: 10.5s;
+}
+
+.delay-110 {
+  animation-delay: 11s;
+}
+
+.delay-115 {
+  animation-delay: 11.5s;
+}
+
+.delay-120 {
+  animation-delay: 12s;
+}
+
+.delay-125 {
+  animation-delay: 12.5s;
+}
+
+.delay-130 {
+  animation-delay: 13s;
+}
+
+.delay-135 {
+  animation-delay: 13.5s;
+}
+
+.delay-140 {
+  animation-delay: 14s;
+}
+
+.delay-145 {
+  animation-delay: 14.5s;
+}
+
+.delay-150 {
+  animation-delay: 15s;
+}
+
+.delay-155 {
+  animation-delay: 15.5s;
+}
+
+.delay-160 {
+  animation-delay: 16s;
+}
+
+.delay-165 {
+  animation-delay: 16.5s;
+}
+
+.delay-170 {
+  animation-delay: 17s;
+}
+
+.delay-175 {
+  animation-delay: 17.5s;
+}
+
+.delay-180 {
+  animation-delay: 18s;
+}
+
+.delay-185 {
+  animation-delay: 18.5s;
+}
+
+.delay-190 {
+  animation-delay: 19s;
+}
+
+.delay-195 {
+  animation-delay: 19.5s;
+}
+
+.delay-200 {
+  animation-delay: 20s;
+}
+
+.header-animate {
+  background: linear-gradient(
+    to right,
+    #7953cd 20%,
+    #00affa 30%,
+    #0190cd 70%,
+    #764ada 80%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 500% auto;
+  animation: textShine 5s ease-in-out infinite alternate;
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes textShine {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-charcter,
+.header-text {
+  text-transform: uppercase;
+  /* background-image: radial-gradient(circle at 50% 50%,
+            #231557 0%,
+            #44107a 29%,
+            #ff1361 67%,
+            #fff800 100%);
+    animation: textclip 2s linear infinite;
+    -webkit-text-fill-color: transparent;
+    color: #fff; */
+  background-size: auto auto;
+  background-clip: border-box;
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  display: inline-block;
+  transition:
+    font-size 0.2s ease-in-out,
+    color 0.3s ease-in-out;
+  font-size: 35px;
+}
+
+@keyframes textclip {
+  to {
+    background-position: 200% center;
+  }
+}
+
+@media screen and (min-width: 700px) {
+  .animate-charcter,
+  .header-text {
+    font-size: 60px;
+  }
+}
+
+.space-top {
+  padding: 40px;
+}
+
+@media screen and (min-width: 1200px) {
+  .space-top {
+    padding: 24px;
+  }
+}
+
+@media screen and (min-width: 2000px) {
+  .space-top {
+    padding: 0px;
+  }
+}

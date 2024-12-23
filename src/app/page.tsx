@@ -29,6 +29,59 @@ export default function Home() {
 
 function Main() {
   const searchParams = useSearchParams();
+  console.log(searchParams.get("tr"));
+
+  if (
+    searchParams.get("tr") === null ||
+    searchParams.get("ar") === null ||
+    searchParams.get("al") === null
+  ) {
+    return (
+      <div className="flex justify-center">
+        <Card
+          className="card m-auto"
+          isBlurred
+          shadow="lg"
+          style={{ height: "100%", width: "100%" }}
+        >
+          <CardHeader>
+            <h1 style={{ fontWeight: "bold" }}>Missing parameters</h1>
+          </CardHeader>
+          <Divider />
+          <CardBody>
+            <p style={{ fontWeight: "bold" }}>
+              Require parameters are missing:
+            </p>
+            <p>
+              tr :{" "}
+              {searchParams.get("tr") == null ? (
+                <b style={{ color: "red" }}>Missing</b>
+              ) : (
+                <b style={{ color: "green" }}>Present</b>
+              )}
+            </p>
+            <p>
+              ar :{" "}
+              {searchParams.get("ar") == null ? (
+                <b style={{ color: "red" }}>Missing</b>
+              ) : (
+                <b style={{ color: "green" }}>Present</b>
+              )}
+            </p>
+            <p>
+              al :{" "}
+              {searchParams.get("al") == null ? (
+                <b style={{ color: "red" }}>Missing</b>
+              ) : (
+                <b style={{ color: "green" }}>Present</b>
+              )}
+            </p>
+          </CardBody>
+        </Card>
+      </div>
+    );
+  }
+
   const title = searchParams.get("tr") || "Unknown";
   const artist = searchParams.get("ar") || "Unknown";
   const album = searchParams.get("al") || "Unknown";
@@ -56,6 +109,12 @@ function Main() {
   const [searchWarning, setSearchWarning] = useState<boolean>(false);
 
   let splitRelated = (related as string).split(";").map((id) => id.trim());
+  const artistArray = artist
+    .split(
+      /(?:feat\.|meets|×|with|cv\.|Cv\.|CV\.|cv:|Cv:|CV:|cv |Cv |CV |va\.|Va\.|VA\.|va:|Va:|VA:|va |Va |VA |vo\.|Vo\.|VO\.|vo:|Vo:|VO:|vo |Vo |VO |&|\(\s*|\s*\)|\[|\]|,)/g
+    )
+    .filter((artist) => artist.trim() !== "")
+    .map((artist) => artist.trim());
 
   useEffect(() => {
     const fetchAlbumData = async () => {
@@ -186,6 +245,7 @@ function Main() {
           setSpotifyEmbedOpacity(1);
         }, 1000);
       }
+      console.log(albumData);
     };
 
     fetchAlbumData();
@@ -215,7 +275,7 @@ function Main() {
             id="spotify-embed-iframe"
             title="Spotify-Embed"
             src={spotifyEmbed}
-            height={"200"}
+            height={"152px"}
             allow="encrypted-media"
           />
         </div>
@@ -228,10 +288,19 @@ function Main() {
           transition: "all .5s ease-in-out",
         }}
       >
-        <Card className="max-w-[400px]" isBlurred radius="lg">
+        <Card
+          className="max-w-[400px]"
+          isBlurred
+          shadow="lg"
+          radius="lg"
+          style={{ overflow: "hidden" }}
+        >
           <CardHeader className="flex gap-3 justify-center">
             {cover ? (
-              <div style={{ position: "relative" }}>
+              <div
+                style={{ position: "relative" }}
+                className="animate__animated animate__zoomInDown"
+              >
                 <Link href={cover} target="_blank">
                   <Image
                     id="album-cover"
@@ -242,15 +311,16 @@ function Main() {
                     isBlurred
                   />
                 </Link>
-                <div
-                  style={{
-                    position: "absolute",
-                    right: 10,
-                    bottom: 0,
-                    zIndex: 50,
-                  }}
-                >
-                  {searchWarning ? (
+                {searchWarning ? (
+                  <div
+                    style={{
+                      position: "absolute",
+                      right: 10,
+                      bottom: 0,
+                      zIndex: 50,
+                    }}
+                    className="animate__animated animate__fadeIn animate__delay-1s"
+                  >
                     <Popover placement="left" showArrow>
                       <PopoverTrigger>
                         <Button isIconOnly>
@@ -267,28 +337,29 @@ function Main() {
                         </div>
                       </PopoverContent>
                     </Popover>
-                  ) : null}
-                </div>
+                  </div>
+                ) : null}
               </div>
             ) : (
               <Spinner size="lg" />
             )}
           </CardHeader>
           {/* <Divider /> */}
-          <CardBody>
+          <CardBody style={{ overflow: "hidden" }}>
             <div
               style={{
                 textAlign: "center",
                 fontSize: "32px",
                 fontWeight: "bold",
+                overflow: "hidden",
               }}
-              className="animate__animated animate__bounceIn"
+              className="animate__animated animate__bounceIn delay-025"
             >
               {title}
             </div>
             <div
-              style={{ textAlign: "center" }}
-              className="animate__animated animate__fadeInDown"
+              style={{ textAlign: "center", overflow: "hidden" }}
+              className="animate__animated animate__fadeInDown delay-075"
             >
               {artist}
             </div>
@@ -368,6 +439,26 @@ function Main() {
                       </td>
                     </tr>
                   )}
+                  {artistArray.length > 1 ? (
+                    <tr className="alt-row">
+                      <td>└─ &nbsp; Contain Artists</td>
+                      <td colSpan={2}>
+                        {artistArray.map((item, index) => (
+                          <span key={index}>
+                            <Link
+                              className="alt-row"
+                              href={"https://www.google.com/search?q=" + item}
+                              target="_blank"
+                              underline="hover"
+                            >
+                              {item}
+                            </Link>
+                            {index !== artistArray.length - 1 ? ", " : ""}
+                          </span>
+                        ))}
+                      </td>
+                    </tr>
+                  ) : null}
                   <tr>
                     <td>Album</td>
                     <td>
@@ -394,6 +485,25 @@ function Main() {
                       </Button>
                     </td>
                   </tr>
+                  {albumData != null ? (
+                    albumData.name.toLowerCase() != album.toLowerCase() ? (
+                      <tr className="alt-row">
+                        <td>└─ &nbsp; Alt Album Name</td>
+                        <td colSpan={2}>
+                          <Link
+                            className="alt-row"
+                            href={
+                              "https://www.google.com/search?q=" +
+                              albumData.name
+                            }
+                            target={"_blank"}
+                          >
+                            {albumData.name}
+                          </Link>
+                        </td>
+                      </tr>
+                    ) : null
+                  ) : null}
                   {albumArtist != "Various Artists" ? (
                     <tr>
                       <td>Album Artist</td>
@@ -505,7 +615,7 @@ function Main() {
                   searchProvider="YouTube"
                   image="/youtube.jpg"
                   padding="0px"
-                  textWhite={true}
+                  textWhite={false}
                   track={title + " " + artist}
                   trackURL="https://www.youtube.com/results?search_query="
                 ></SearchCard>
