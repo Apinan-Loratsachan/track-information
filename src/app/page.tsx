@@ -106,6 +106,7 @@ function Main() {
 
   useEffect(() => {
     const fetchAlbumData = async () => {
+      let albumCover;
       if ((spotifyAlbumId as string) !== "") {
         try {
           const response = await fetch(
@@ -133,10 +134,12 @@ function Main() {
             setCover(customAlbumCover);
             favicon.href = customAlbumCover;
             setBackground(`url(${customAlbumCover})`);
+            albumCover = customAlbumCover;
           } else if (data?.images?.[0]?.url) {
             setCover(data.images[0].url);
             favicon.href = data.images[0].url;
             setBackground(`url(${data.images[0].url})`);
+            albumCover = data.images[0].url;
           }
 
           document.head.appendChild(favicon);
@@ -165,6 +168,20 @@ function Main() {
               setSpotifyEmbedOpacity(1);
             }, 1000);
           }
+          if ("mediaSession" in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+              title,
+              artist,
+              album,
+              artwork: [
+                {
+                  src: albumCover,
+                  sizes: "256x256",
+                  type: "image/jpg",
+                },
+              ],
+            });
+          }
         } catch (err: any) {
           setError(err.message);
         }
@@ -177,6 +194,7 @@ function Main() {
         document.head.appendChild(favicon);
         const bg = document.getElementById("background") as HTMLDivElement;
         setBackground(`url(${customAlbumCover})`);
+        albumCover = customAlbumCover;
       } else if ((spotifyCoverId as string) !== "") {
         try {
           const response = await fetch(
@@ -201,6 +219,7 @@ function Main() {
           // Set background image
           const bg = document.getElementById("background") as HTMLDivElement;
           setBackground(`url(${data.images[0].url})`);
+          albumCover = data.images[0].url;
         } catch (err: any) {
           setError(err.message);
         }
@@ -222,6 +241,7 @@ function Main() {
         document.head.appendChild(favicon);
         const bg = document.getElementById("background") as HTMLDivElement;
         setBackground(`url(${data.albums.items[0].images[0].url})`);
+        albumCover = data.albums.items[0].images[0].url;
         setSearchWarning(true);
       }
 
@@ -232,8 +252,21 @@ function Main() {
         setTimeout(() => {
           setSpotifyEmbedOpacity(1);
         }, 1000);
+        if ("mediaSession" in navigator) {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title,
+            artist,
+            album,
+            artwork: [
+              {
+                src: albumCover,
+                sizes: "256x256",
+                type: "image/jpg",
+              },
+            ],
+          });
+        }
       }
-      console.log(albumData);
     };
 
     fetchAlbumData();
