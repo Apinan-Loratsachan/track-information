@@ -20,7 +20,7 @@
 }
 
 .header-title {
-  translate: 0px -5px;
+  translate: 0px -9px;
   transition: translate 0.5s ease-in-out, font-size 0.5s ease-in-out;
   /* Specify transition for translate only */
 }
