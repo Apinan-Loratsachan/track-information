@@ -395,17 +395,14 @@ function Main() {
           >
             <CardHeader className="flex gap-3 justify-center">
               {cover ? (
-                <div
-                  style={{ position: "relative" }}
-                  className="animate__animated animate__zoomInDown"
-                >
+                <div className="album-cover-container animate__animated animate__zoomInDown">
                   <Link href={cover} target="_blank">
                     <Image
-                      id="album-cover"
+                      className="album-cover"
                       alt="cover"
                       radius="sm"
                       src={cover as string}
-                      width={775}
+                      width={700}
                       isBlurred
                     />
                   </Link>
@@ -443,23 +440,25 @@ function Main() {
               )}
             </CardHeader>
             {/* <Divider /> */}
-            <CardBody style={{ overflow: "hidden" }}>
-              <div
-                style={{
-                  textAlign: "center",
-                  fontSize: "32px",
-                  fontWeight: "bold",
-                  overflow: "hidden",
-                }}
-                className="animate__animated animate__bounceIn delay-025"
-              >
-                {title}
-              </div>
-              <div
-                style={{ textAlign: "center", overflow: "hidden" }}
-                className="animate__animated animate__fadeInDown delay-075"
-              >
-                {artist}
+            <CardBody style={{ overflow: "visible" }}>
+              <div className="header-title">
+                <div
+                  style={{
+                    textAlign: "center",
+                    fontSize: "32px",
+                    fontWeight: "bold",
+                    overflow: "hidden",
+                  }}
+                  className="animate__animated animate__bounceIn delay-025"
+                >
+                  {title}
+                </div>
+                <div
+                  style={{ textAlign: "center", overflow: "hidden" }}
+                  className="animate__animated animate__fadeInDown delay-075"
+                >
+                  {artist}
+                </div>
               </div>
             </CardBody>
             <div className="px-3">
