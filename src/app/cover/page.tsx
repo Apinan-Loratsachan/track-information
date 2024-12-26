@@ -75,7 +75,7 @@ export default function Cover() {
         ) : (
           <img
             src={imageSrc as string}
-            alt="cover image"
+            alt="cover"
             className={`cover-display ${coverState ? "display-state" : "info-state"} animate__animated animate__zoomIn`}
           />
         )}
