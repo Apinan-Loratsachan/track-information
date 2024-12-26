@@ -64,6 +64,8 @@ function Main() {
           justifyContent: "center",
           alignItems: "center",
           zIndex: 2,
+          padding: coverState ? "0px" : "10px",
+          transition: "padding 0.5s ease-in-out",
         }}
       >
         {loading ? (
@@ -115,7 +117,6 @@ function Main() {
       {loading ? null : (
         <button
           type="button"
-          title="Toggle info"
           onClick={() => {
             setCoverState(!coverState);
             getDimentions();
@@ -126,9 +127,12 @@ function Main() {
             right: "0",
             height: "100%",
             width: "100%",
+            opacity: 0,
             zIndex: 5,
           }}
-        />
+        >
+          toggle info
+        </button>
       )}
     </div>
   );

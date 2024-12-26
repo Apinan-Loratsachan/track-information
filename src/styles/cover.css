@@ -39,7 +39,7 @@
   position: relative;
   object-fit: contain;
   border-radius: 0px;
-  transition: height .5s ease-in-out, translate .9s ease, border-radius .7s ease;
+  transition: height .5s ease-in-out, translate .9s ease, border-radius 1s ease-in-out;
 }
 
 .cover-display.display-state {
@@ -47,7 +47,7 @@
 }
 
 .cover-display.info-state {
-  height: 50%;
+  height: 55%;
   translate: 0px -10%;
   border-radius: 10px;
 }
