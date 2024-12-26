@@ -23,6 +23,7 @@ import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 import NoSsr from "../components/no-ssr";
 import React from "react";
+import { color } from "framer-motion";
 
 const BackgroundOverlay = dynamic(
   () => import("../components/background-overlay"),
@@ -347,14 +348,30 @@ function Main() {
           <div
             className={`alert animate__animated ${alertClass} animate__faster`}
           >
-            <Alert
-              color="success"
-              description={alertMessage}
-              isVisible={isVisible}
-              title={`Copied ${alertTitle}`}
-              variant="faded"
-              onClose={() => setIsVisible(false)}
-            />
+            <div style={{ position: "relative" }}>
+              <div
+                style={{
+                  position: "absolute",
+                  top: "0px",
+                  right: "0px",
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                  borderRadius: "15px",
+                }}
+              />
+              <Alert
+                color="success"
+                description={alertMessage}
+                isVisible={isVisible}
+                title={`Copied ${alertTitle}`}
+                variant="faded"
+                onClose={() => setIsVisible(false)}
+                style={{
+                  backdropFilter: "blur(10px)",
+                }}
+              />
+            </div>
           </div>
         ) : null}
       </div>
