@@ -125,7 +125,7 @@ function Main() {
           // Set favicon
           const favicon = document.createElement("link");
           favicon.rel = "icon";
-          favicon.type = "image/x-icon";
+          favicon.type = "image/jpg";
 
           // Set the cover based on customAlbumCover or albumData
           console.log(customAlbumCover);
@@ -189,7 +189,7 @@ function Main() {
         setCover(customAlbumCover);
         const favicon = document.createElement("link");
         favicon.rel = "icon";
-        favicon.type = "image/x-icon";
+        favicon.type = "image/jpg";
         favicon.href = customAlbumCover;
         document.head.appendChild(favicon);
         const bg = document.getElementById("background") as HTMLDivElement;
@@ -211,7 +211,7 @@ function Main() {
           // Set favicon
           const favicon = document.createElement("link");
           favicon.rel = "icon";
-          favicon.type = "image/x-icon";
+          favicon.type = "image/jpg";
           favicon.href = data.images[0].url; // Replace with your favicon URL
           document.head.appendChild(favicon);
           setCover(data.images[0].url);
@@ -236,7 +236,7 @@ function Main() {
         setCover(data.albums.items[0].images[0].url);
         const favicon = document.createElement("link");
         favicon.rel = "icon";
-        favicon.type = "image/x-icon";
+        favicon.type = "image/jpg";
         favicon.href = data.albums.items[0].images[0].url; // Replace with your favicon URL
         document.head.appendChild(favicon);
         const bg = document.getElementById("background") as HTMLDivElement;
@@ -283,7 +283,14 @@ function Main() {
           className="card m-auto"
           isBlurred
           shadow="lg"
-          style={{ height: "100%", width: "100%" }}
+          style={{
+            overflow: "hidden",
+            backgroundColor: isDarkMode
+              ? "hsla(0,0%,0%,.8)"
+              : "hsla(0,0%,100%,.8)",
+            height: "100%",
+            width: "100%",
+          }}
         >
           <CardHeader>
             <h1 style={{ fontWeight: "bold" }}>Missing parameters</h1>
@@ -396,7 +403,7 @@ function Main() {
             <CardHeader className="flex gap-3 justify-center">
               {cover ? (
                 <div className="album-cover-container animate__animated animate__zoomInDown">
-                  <Link href={cover} target="_blank">
+                  <Link href={`/cover?src=${cover}`} target="_blank">
                     <Image
                       className="album-cover"
                       alt="cover"
@@ -582,7 +589,7 @@ function Main() {
                     {albumData != null ? (
                       albumData.name.toLowerCase() != album.toLowerCase() ? (
                         <tr className="alt-row">
-                          <td>└─ &nbsp; Alt Album Name</td>
+                          <td>└─ &nbsp; Alt Name</td>
                           <td colSpan={2}>
                             <Link
                               className="alt-row"

@@ -1,7 +1,8 @@
 .bg {
   position: fixed;
-  top: -50px;
-  left: -50px;
+  top: 50%;
+  left: 50%;
+  translate: -50% -50%;
   height: 110%;
   width: 110%;
   background-position: center;
@@ -16,11 +17,11 @@
   position: fixed;
   top: -50px;
   left: -50px;
-  height: 110%;
-  width: 110%;
+  height: 300%;
+  width: 300%;
   background-color: black;
   background-position: center;
   opacity: 0.5;
-  transition: all .5s ease-in-out;
+  transition: all 0.5s ease-in-out;
   z-index: 0;
 }

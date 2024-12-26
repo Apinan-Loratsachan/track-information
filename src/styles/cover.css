@@ -34,3 +34,29 @@
     translate: 0px -25px;
   }
 }
+
+.cover-display {
+  position: relative;
+  object-fit: contain;
+  border-radius: 0px;
+  transition: height .5s ease-in-out, translate .9s ease, border-radius .7s ease;
+}
+
+.cover-display.display-state {
+  height: 100%;
+}
+
+.cover-display.info-state {
+  height: 50%;
+  translate: 0px -10%;
+  border-radius: 10px;
+}
+
+.cover-info {
+  position: relative;
+  transition: all .5s ease-in-out;
+}
+
+.cover-info.display-state {
+  translate: 0px -300px;
+}

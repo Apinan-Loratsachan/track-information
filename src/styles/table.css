@@ -9,7 +9,8 @@
 
 #meta-table tr td:nth-child(1) {
   width: 25%;
-  padding-left: 10px;
+  min-width: 125px;
+  padding: 0px 10px 0px 10px;
 }
 
 #meta-table tr td:nth-child(3) {
