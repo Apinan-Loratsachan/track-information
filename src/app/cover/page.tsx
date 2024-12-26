@@ -3,10 +3,18 @@
 import BackgroundOverlay from "@/src/components/background-overlay";
 import { useTheme } from "next-themes";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { Card, CardBody, CardHeader, Spinner } from "@nextui-org/react";
 
 export default function Cover() {
+  return (
+    <Suspense>
+      <Main />
+    </Suspense>
+  );
+}
+
+function Main() {
   const searchParams = useSearchParams();
   const imageSrc = searchParams.get("src") || null;
 
