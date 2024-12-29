@@ -64,6 +64,7 @@ function Main() {
   const [spotifyEmbed, setSpotifyEmbed] = useState<string>("");
   const [spotifyEmbedOpacity, setSpotifyEmbedOpacity] = useState<number>(0);
   const [searchWarning, setSearchWarning] = useState<boolean>(false);
+  const [missingParam, setMissingParam] = useState<boolean>(true);
 
   const { setTheme, theme } = useTheme();
   const isDarkMode = typeof window !== "undefined" ? theme === "dark" : false;
@@ -92,10 +93,6 @@ function Main() {
     }, 3000);
   };
 
-  const atitle = "Success Notification";
-  const description =
-    "Your action has been completed successfully. We'll notify you when updates are available.";
-
   let splitRelated = (related as string).split(";").map((id) => id.trim());
   const artistArray = artist
     .split(
@@ -105,6 +102,13 @@ function Main() {
     .map((artist) => artist.trim());
 
   useEffect(() => {
+    if (
+      searchParams.get("tr") !== null ||
+      searchParams.get("ar") !== null ||
+      searchParams.get("al") !== null
+    ) {
+      setMissingParam(false);
+    }
     const fetchAlbumData = async () => {
       let albumCover;
       if ((spotifyAlbumId as string) !== "") {
@@ -269,14 +273,12 @@ function Main() {
       }
     };
 
-    fetchAlbumData();
+    if (!missingParam) {
+      fetchAlbumData();
+    }
   }, [spotifyAlbumId, customAlbumCover, spotifyEmbedOpacity]);
 
-  if (
-    searchParams.get("tr") === null ||
-    searchParams.get("ar") === null ||
-    searchParams.get("al") === null
-  ) {
+  if (missingParam) {
     return (
       <div className="flex justify-center">
         <Card
