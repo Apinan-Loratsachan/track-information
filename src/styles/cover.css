@@ -15,6 +15,7 @@
 
 .album-cover-container {
   position: relative;
+  translate: 0px -2.5px;
   padding: 0px;
   transition: all .5s ease-in-out;
 }
@@ -27,7 +28,7 @@
 
 @media screen and (min-width: 600px) {
   .album-cover-container {
-    padding: 35px;
+    padding: 36px;
   }
 
   .header-title {

@@ -65,7 +65,6 @@ function Main() {
   const [spotifyEmbed, setSpotifyEmbed] = useState<string>("");
   const [spotifyEmbedOpacity, setSpotifyEmbedOpacity] = useState<number>(0);
   const [searchWarning, setSearchWarning] = useState<boolean>(false);
-  const [missingParam, setMissingParam] = useState<boolean>(true);
 
   const { setTheme, theme } = useTheme();
   const isDarkMode = typeof window !== "undefined" ? theme === "dark" : false;
@@ -103,13 +102,6 @@ function Main() {
     .map((artist) => artist.trim());
 
   useEffect(() => {
-    if (
-      searchParams.get("tr") !== null ||
-      searchParams.get("ar") !== null ||
-      searchParams.get("al") !== null
-    ) {
-      setMissingParam(false);
-    }
     const fetchAlbumData = async () => {
       let albumCover;
       if ((spotifyAlbumId as string) !== "") {
@@ -274,12 +266,14 @@ function Main() {
       }
     };
 
-    if (!missingParam) {
-      fetchAlbumData();
-    }
+    fetchAlbumData();
   }, [spotifyAlbumId, customAlbumCover, spotifyEmbedOpacity]);
 
-  if (missingParam) {
+  if (
+    searchParams.get("tr") === null ||
+    searchParams.get("ar") === null ||
+    searchParams.get("al") === null
+  ) {
     return (
       <div className="flex justify-center">
         <Card

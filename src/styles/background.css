@@ -9,6 +9,8 @@
   background-size: cover;
   filter: blur(30px);
   -webkit-filter: blur(30px);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
   transition: all 1s ease-in-out;
   z-index: 0;
 }
