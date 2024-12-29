@@ -393,7 +393,10 @@ function Main() {
             height: spotifyEmbedOpacity == 1 ? "50px" : "0px",
           }}
           className={
-            spotifyEmbedOpacity == 1 ? "animate__animated animate__zoomIn" : ""
+            "main-container " +
+            (spotifyEmbedOpacity == 1
+              ? "animate__animated animate__zoomIn"
+              : "")
           }
         >
           <iframe
@@ -407,8 +410,8 @@ function Main() {
         </div>
       ) : null}
       <div
+        className="main-container"
         style={{
-          maxWidth: "800px",
           margin: "0 auto",
           paddingTop: spotifyEmbedOpacity == 1 ? "150px" : "0px",
           transition: "all .5s ease-in-out",
