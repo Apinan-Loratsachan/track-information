@@ -1,4 +1,4 @@
-#album-cover {
+.album-cover {
   /* scale: 1.04; */
   translate: 0px 3px;
   transition: all 1s ease-in-out;
@@ -11,4 +11,52 @@
   }
 
   user-select: none;
+}
+
+.album-cover-container {
+  position: relative;
+  padding: 0px;
+  transition: all .5s ease-in-out;
+}
+
+.header-title {
+  translate: 0px -9px;
+  transition: translate 0.5s ease-in-out, font-size 0.5s ease-in-out;
+  /* Specify transition for translate only */
+}
+
+@media screen and (min-width: 600px) {
+  .album-cover-container {
+    padding: 35px;
+  }
+
+  .header-title {
+    translate: 0px -25px;
+  }
+}
+
+.cover-display {
+  position: relative;
+  object-fit: contain;
+  border-radius: 0px;
+  transition: height .5s ease-in-out, translate .9s ease, border-radius 1s ease-in-out;
+}
+
+.cover-display.display-state {
+  height: 100%;
+}
+
+.cover-display.info-state {
+  height: 55%;
+  translate: 0px -10%;
+  border-radius: 10px;
+}
+
+.cover-info {
+  position: relative;
+  transition: all .5s ease-in-out;
+}
+
+.cover-info.display-state {
+  translate: 0px -300px;
 }

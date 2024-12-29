@@ -43,7 +43,7 @@ export default function RootLayout({
         <script
           src="https://kit.fontawesome.com/da71fc72b9.js"
           crossOrigin="anonymous"
-        ></script>
+        />
       </head>
       <body
         style={{ backgroundImage: `url(${bg.src})` }}

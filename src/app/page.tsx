@@ -23,6 +23,7 @@ import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 import NoSsr from "../components/no-ssr";
 import React from "react";
+import { color } from "framer-motion";
 
 const BackgroundOverlay = dynamic(
   () => import("../components/background-overlay"),
@@ -129,7 +130,7 @@ function Main() {
           // Set favicon
           const favicon = document.createElement("link");
           favicon.rel = "icon";
-          favicon.type = "image/x-icon";
+          favicon.type = "image/jpg";
 
           // Set the cover based on customAlbumCover or albumData
           console.log(customAlbumCover);
@@ -193,7 +194,7 @@ function Main() {
         setCover(customAlbumCover);
         const favicon = document.createElement("link");
         favicon.rel = "icon";
-        favicon.type = "image/x-icon";
+        favicon.type = "image/jpg";
         favicon.href = customAlbumCover;
         document.head.appendChild(favicon);
         const bg = document.getElementById("background") as HTMLDivElement;
@@ -215,7 +216,7 @@ function Main() {
           // Set favicon
           const favicon = document.createElement("link");
           favicon.rel = "icon";
-          favicon.type = "image/x-icon";
+          favicon.type = "image/jpg";
           favicon.href = data.images[0].url; // Replace with your favicon URL
           document.head.appendChild(favicon);
           setCover(data.images[0].url);
@@ -240,7 +241,7 @@ function Main() {
         setCover(data.albums.items[0].images[0].url);
         const favicon = document.createElement("link");
         favicon.rel = "icon";
-        favicon.type = "image/x-icon";
+        favicon.type = "image/jpg";
         favicon.href = data.albums.items[0].images[0].url; // Replace with your favicon URL
         document.head.appendChild(favicon);
         const bg = document.getElementById("background") as HTMLDivElement;
@@ -285,7 +286,14 @@ function Main() {
           className="card m-auto"
           isBlurred
           shadow="lg"
-          style={{ height: "100%", width: "100%" }}
+          style={{
+            overflow: "hidden",
+            backgroundColor: isDarkMode
+              ? "hsla(0,0%,0%,.8)"
+              : "hsla(0,0%,100%,.8)",
+            height: "100%",
+            width: "100%",
+          }}
         >
           <CardHeader>
             <h1 style={{ fontWeight: "bold" }}>Missing parameters</h1>
@@ -342,14 +350,30 @@ function Main() {
           <div
             className={`alert animate__animated ${alertClass} animate__faster`}
           >
-            <Alert
-              color="success"
-              description={alertMessage}
-              isVisible={isVisible}
-              title={`Copied ${alertTitle}`}
-              variant="faded"
-              onClose={() => setIsVisible(false)}
-            />
+            <div style={{ position: "relative" }}>
+              <div
+                style={{
+                  position: "absolute",
+                  top: "0px",
+                  right: "0px",
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                  borderRadius: "15px",
+                }}
+              />
+              <Alert
+                color="success"
+                description={alertMessage}
+                isVisible={isVisible}
+                title={`Copied ${alertTitle}`}
+                variant="faded"
+                onClose={() => setIsVisible(false)}
+                style={{
+                  backdropFilter: "blur(10px)",
+                }}
+              />
+            </div>
           </div>
         ) : null}
       </div>
@@ -397,17 +421,14 @@ function Main() {
           >
             <CardHeader className="flex gap-3 justify-center">
               {cover ? (
-                <div
-                  style={{ position: "relative" }}
-                  className="animate__animated animate__zoomInDown"
-                >
-                  <Link href={cover} target="_blank">
+                <div className="album-cover-container animate__animated animate__zoomInDown">
+                  <Link href={`/cover?src=${cover}`} target="_blank">
                     <Image
-                      id="album-cover"
+                      className="album-cover"
                       alt="cover"
                       radius="sm"
                       src={cover as string}
-                      width={775}
+                      width={700}
                       isBlurred
                     />
                   </Link>
@@ -445,23 +466,25 @@ function Main() {
               )}
             </CardHeader>
             {/* <Divider /> */}
-            <CardBody style={{ overflow: "hidden" }}>
-              <div
-                style={{
-                  textAlign: "center",
-                  fontSize: "32px",
-                  fontWeight: "bold",
-                  overflow: "hidden",
-                }}
-                className="animate__animated animate__bounceIn delay-025"
-              >
-                {title}
-              </div>
-              <div
-                style={{ textAlign: "center", overflow: "hidden" }}
-                className="animate__animated animate__fadeInDown delay-075"
-              >
-                {artist}
+            <CardBody style={{ overflow: "visible" }}>
+              <div className="header-title">
+                <div
+                  style={{
+                    textAlign: "center",
+                    fontSize: "32px",
+                    fontWeight: "bold",
+                    overflow: "hidden",
+                  }}
+                  className="animate__animated animate__bounceIn delay-025"
+                >
+                  {title}
+                </div>
+                <div
+                  style={{ textAlign: "center", overflow: "hidden" }}
+                  className="animate__animated animate__fadeInDown delay-075"
+                >
+                  {artist}
+                </div>
               </div>
             </CardBody>
             <div className="px-3">
@@ -585,7 +608,7 @@ function Main() {
                     {albumData != null ? (
                       albumData.name.toLowerCase() != album.toLowerCase() ? (
                         <tr className="alt-row">
-                          <td>└─ &nbsp; Alt Album Name</td>
+                          <td>└─ &nbsp; Alt Name</td>
                           <td colSpan={2}>
                             <Link
                               className="alt-row"

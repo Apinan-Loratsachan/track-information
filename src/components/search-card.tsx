@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Card, CardFooter, Image } from "@nextui-org/react";
+import { Card, CardFooter, Image } from "@nextui-org/react";
+import { useState } from "react";
 
 export default function SearchCard({
   searchProvider,
@@ -17,6 +18,7 @@ export default function SearchCard({
   padding: string;
   textWhite: boolean;
 }) {
+  const [isHovered, setIsHovered] = useState(false);
   return (
     <div className="card-container p-3">
       <Card
@@ -24,7 +26,18 @@ export default function SearchCard({
         isFooterBlurred
         isPressable
         shadow="lg"
+        style={{
+          boxShadow: isHovered
+            ? "10px 10px 15px 0px rgba(0, 0, 0, 0.3)"
+            : "10px 10px 30px 0px rgba(0, 0, 0, 0.2)",
+        }}
         onPress={() => window.open(trackURL + track, "_blank")}
+        onMouseEnter={() => {
+          setIsHovered(true);
+        }}
+        onMouseLeave={() => {
+          setIsHovered(false);
+        }}
       >
         <Image
           style={{ padding: padding, objectFit: "cover" }}

@@ -3,12 +3,13 @@
   aspect-ratio: 16/9;
   display: flex;
   justify-content: center;
+  transition: all 0.3s ease;
 }
 
 .card-container {
   min-width: 300px;
-  transition: all .3s ease;
-  &:hover{
+  transition: all 0.3s ease;
+  &:hover {
     scale: 1.05;
   }
 }
