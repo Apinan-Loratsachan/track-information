@@ -258,7 +258,6 @@ function Main() {
         }
         const data = await response.json();
         setAlbumData(data);
-        setSpotifyAlbumName(data.albums.items[0].name);
         setCover(data.albums.items[0].images[0].url);
         const favicon = document.createElement("link");
         favicon.rel = "icon";
@@ -959,9 +958,8 @@ function Main() {
                       title="Spotify-Album-Embed"
                       className="animate__animated animate__zoomIn animate__delay-1s"
                       src={spotifyAlbumEmbed}
-                      height={400}
+                      height="100%"
                       allow="encrypted-media"
-                      style={{ borderRadius: "15px" }}
                     />
                   </ModalBody>
                   <ModalFooter>

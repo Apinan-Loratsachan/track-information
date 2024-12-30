@@ -8,10 +8,21 @@
 
 #spotify-embed {
   opacity: 1;
-  transition: all .5s ease-in-out;
+  transition: all 0.5s ease-in-out;
   height: 0px;
 }
 
 #spotify-embed-iframe {
   width: 100%;
+}
+
+#spotify-album-embed-iframe {
+  border-radius: 15px;
+  height: 40vh;
+}
+
+@media screen and (max-width: 640px) {
+  #spotify-album-embed-iframe {
+    height: 60vh;
+  }
 }
