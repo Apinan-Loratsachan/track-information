@@ -1,0 +1,21 @@
+{
+    "title": "Title",
+    "alt_title": "Alt Title",
+    "artist": "Artist",
+    "contain_artists": "Contain Artists",
+    "album": "Album",
+    "alt_album": "Alt Name",
+    "albumArtist": "Album Artist",
+    "disc": "Disc",
+    "track": "Track",
+    "length": "Length",
+    "genre": "Genre",
+    "year": "Year",
+    "language": "Language",
+    "related": "Related",
+    "copy": "Copy",
+    "warning": "Warning",
+    "cover_warning": "This cover is from a search result. It may not be the actual cover of the album.",
+    "search_track_on": "Search Track on",
+    "open_on": "Open on"
+}
