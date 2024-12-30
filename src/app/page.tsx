@@ -809,6 +809,9 @@ function Main() {
             onOpenChange={onOpenChange}
             backdrop="blur"
             size="2xl"
+            isDismissable={false}
+            isKeyboardDismissDisabled={true}
+            style={{ userSelect: "none" }}
             // hideCloseButton
           >
             <ModalContent>
