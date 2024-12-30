@@ -11,9 +11,6 @@ import {
   Button,
   Link,
   Spinner,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
   Alert,
   useDisclosure,
   Modal,
@@ -21,6 +18,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalFooter,
+  Tooltip,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { Suspense } from "react";
@@ -474,19 +472,16 @@ function Main() {
                     <div
                       style={{
                         position: "absolute",
-                        right: 50,
-                        bottom: 50,
+                        right: "6.2%",
+                        bottom: "6.7%",
                         zIndex: 50,
                       }}
-                      className="animate__animated animate__fadeIn animate__delay-1s"
+                      className="animate__animated animate__bounceIn animate__delay-1s"
                     >
-                      <Popover placement="left" showArrow>
-                        <PopoverTrigger>
-                          <Button isIconOnly>
-                            <i className="fa-solid fa-circle-info fa-2xl" />
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent>
+                      <Tooltip
+                        placement="left"
+                        showArrow
+                        content={
                           <div className="px-1 py-2">
                             <div className="text-small font-bold">Warning</div>
                             <div className="text-tiny">
@@ -494,8 +489,15 @@ function Main() {
                               the actual cover of the album.
                             </div>
                           </div>
-                        </PopoverContent>
-                      </Popover>
+                        }
+                      >
+                        <div
+                          className="bg-background px-2 py-3"
+                          style={{ borderRadius: "30%" }}
+                        >
+                          <i className="fa-solid fa-circle-info fa-2xl animate__animated animate__zoomIn animate__delay-1s" />
+                        </div>
+                      </Tooltip>
                     </div>
                   ) : null}
                 </div>
