@@ -8,8 +8,7 @@
 
 #spotify-embed {
   opacity: 1;
-  transition: all 1s ease-in-out;
-  max-width: 800px;
+  transition: all .5s ease-in-out;
   height: 0px;
 }
 

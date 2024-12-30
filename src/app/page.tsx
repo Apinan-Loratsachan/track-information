@@ -15,6 +15,12 @@ import {
   PopoverTrigger,
   PopoverContent,
   Alert,
+  useDisclosure,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { Suspense } from "react";
@@ -23,7 +29,6 @@ import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 import NoSsr from "../components/no-ssr";
 import React from "react";
-import { color } from "framer-motion";
 
 const BackgroundOverlay = dynamic(
   () => import("../components/background-overlay"),
@@ -63,9 +68,12 @@ function Main() {
   const [cover, setCover] = useState<string | null>(null);
   const [background, setBackground] = useState<string | null>(null);
   const [spotifyEmbed, setSpotifyEmbed] = useState<string>("");
+  const [spotifyAlbumEmbed, setSpotifyAlbumEmbed] = useState<string>("");
   const [spotifyEmbedOpacity, setSpotifyEmbedOpacity] = useState<number>(0);
   const [searchWarning, setSearchWarning] = useState<boolean>(false);
   const [spotifyAlbumName, setSpotifyAlbumName] = useState<string>("");
+
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const { setTheme, theme } = useTheme();
   const isDarkMode = typeof window !== "undefined" ? theme === "dark" : false;
@@ -93,10 +101,6 @@ function Main() {
       }, 500);
     }, 3000);
   };
-
-  const atitle = "Success Notification";
-  const description =
-    "Your action has been completed successfully. We'll notify you when updates are available.";
 
   let splitRelated = (related as string).split(";").map((id) => id.trim());
   const artistArray = artist
@@ -158,6 +162,9 @@ function Main() {
                 setSpotifyEmbed(
                   `https://open.spotify.com/embed/track/${trackData.id}`
                 );
+                setSpotifyAlbumEmbed(
+                  `https://open.spotify.com/embed/album/${data.id}`
+                );
                 setTimeout(() => {
                   setSpotifyEmbedOpacity(1);
                 }, 1000);
@@ -166,6 +173,9 @@ function Main() {
           } else {
             setSpotifyEmbed(
               `https://open.spotify.com/embed/track/${data.tracks.items[trackNumber - 1].id}`
+            );
+            setSpotifyAlbumEmbed(
+              `https://open.spotify.com/embed/album/${data.id}`
             );
             setTimeout(() => {
               setSpotifyEmbedOpacity(1);
@@ -388,7 +398,10 @@ function Main() {
             height: spotifyEmbedOpacity == 1 ? "50px" : "0px",
           }}
           className={
-            spotifyEmbedOpacity == 1 ? "animate__animated animate__zoomIn" : ""
+            "main-container " +
+            (spotifyEmbedOpacity == 1
+              ? "animate__animated animate__zoomIn"
+              : "")
           }
         >
           <iframe
@@ -402,8 +415,8 @@ function Main() {
         </div>
       ) : null}
       <div
+        className="main-container"
         style={{
-          maxWidth: "800px",
           margin: "0 auto",
           paddingTop: spotifyEmbedOpacity == 1 ? "150px" : "0px",
           transition: "all .5s ease-in-out",
@@ -584,7 +597,20 @@ function Main() {
                       </tr>
                     ) : null}
                     <tr>
-                      <td>Album</td>
+                      <td>
+                        Album{" "}
+                        {spotifyAlbumEmbed != "" ||
+                        spotifyAlbumEmbed != null ? (
+                          <Button
+                            isIconOnly
+                            color="success"
+                            variant="shadow"
+                            onPress={onOpen}
+                          >
+                            <i className="fa-brands fa-spotify fa-xl"></i>
+                          </Button>
+                        ) : null}
+                      </td>
                       <td>
                         <Link
                           href={"https://www.google.com/search?q=" + album}
@@ -783,6 +809,53 @@ function Main() {
             </CardFooter>
           </Card>
         </NoSsr>
+        {spotifyAlbumEmbed != "" || spotifyAlbumEmbed != null ? (
+          <Modal
+            isOpen={isOpen}
+            onOpenChange={onOpenChange}
+            backdrop="blur"
+            size="2xl"
+            isDismissable={false}
+            isKeyboardDismissDisabled={true}
+            style={{ userSelect: "none" }}
+            // hideCloseButton
+          >
+            <ModalContent>
+              {(onClose) => (
+                <>
+                  <ModalHeader className="flex flex-col gap-1">
+                    {album}
+                  </ModalHeader>
+                  <ModalBody style={{ position: "relative" }}>
+                    <Spinner
+                      size="lg"
+                      style={{
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        translate: "-50% -50%",
+                      }}
+                    />
+                    <iframe
+                      id="spotify-album-embed-iframe"
+                      title="Spotify-Album-Embed"
+                      className="animate__animated animate__zoomIn animate__delay-1s"
+                      src={spotifyAlbumEmbed}
+                      height={400}
+                      allow="encrypted-media"
+                      style={{ borderRadius: "15px" }}
+                    />
+                  </ModalBody>
+                  <ModalFooter>
+                    {/* <Button color="danger" variant="light" onPress={onClose}>
+                      Close
+                    </Button> */}
+                  </ModalFooter>
+                </>
+              )}
+            </ModalContent>
+          </Modal>
+        ) : null}
       </div>
     </div>
   );
