@@ -599,8 +599,7 @@ function Main() {
                     <tr>
                       <td>
                         Album{" "}
-                        {spotifyAlbumEmbed != "" ||
-                        spotifyAlbumEmbed != null ? (
+                        {spotifyAlbumEmbed ? (
                           <Button
                             isIconOnly
                             color="success"

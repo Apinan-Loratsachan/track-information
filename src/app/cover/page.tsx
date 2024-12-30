@@ -4,7 +4,7 @@ import BackgroundOverlay from "@/src/components/background-overlay";
 import { useTheme } from "next-themes";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
-import { Card, CardBody, CardHeader, Spinner } from "@nextui-org/react";
+import { Card, CardBody, Spinner } from "@nextui-org/react";
 
 export default function Cover() {
   return (
