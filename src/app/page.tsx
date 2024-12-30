@@ -513,14 +513,10 @@ function Main() {
                     fontWeight: "bold",
                     overflow: "hidden",
                   }}
-                  className="animate__animated animate__bounceIn delay-025"
                 >
                   {title}
                 </div>
-                <div
-                  style={{ textAlign: "center", overflow: "hidden" }}
-                  className="animate__animated animate__fadeInDown delay-075"
-                >
+                <div style={{ textAlign: "center", overflow: "hidden" }}>
                   {artist}
                 </div>
               </div>
