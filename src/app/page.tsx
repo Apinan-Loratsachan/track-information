@@ -809,6 +809,7 @@ function Main() {
             onOpenChange={onOpenChange}
             backdrop="blur"
             size="2xl"
+            // hideCloseButton
           >
             <ModalContent>
               {(onClose) => (
@@ -837,9 +838,9 @@ function Main() {
                     />
                   </ModalBody>
                   <ModalFooter>
-                    <Button color="danger" variant="light" onPress={onClose}>
+                    {/* <Button color="danger" variant="light" onPress={onClose}>
                       Close
-                    </Button>
+                    </Button> */}
                   </ModalFooter>
                 </>
               )}
