@@ -56,7 +56,7 @@ function Main() {
   const year = searchParams.get("y") || "Unknown";
   const language = searchParams.get("lang") || "Unknown";
   const related = searchParams.get("rel") || "";
-  const alternatTitle = searchParams.get("atr");
+  const alternatTitle = searchParams.get("atr") || "";
   const customAlbumCover = searchParams.get("cti");
   const spotifyAlbumId = searchParams.get("aref");
   const spotifyTrackId = searchParams.get("tref");
