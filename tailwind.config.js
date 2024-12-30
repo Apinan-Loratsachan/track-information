@@ -8,10 +8,10 @@ export default {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'
   ],
   theme: {
-    listStyleType: {
-      none: 'none',
-      disc: 'disc',
-      decimal: 'decimal',
+    screens: {
+      'sm': '576px',
+      'md': '960px',
+      'lg': '1440px',
     },
     extend: {
       fontFamily: {

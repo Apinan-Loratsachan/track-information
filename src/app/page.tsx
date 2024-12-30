@@ -678,7 +678,11 @@ function Main() {
                     )}
                     {artistArray.length > 1 ? (
                       <tr className="expandable-row alt-row">
-                        <td>└─ &nbsp; Contain Artists</td>
+                        <td>
+                          <span id="contain-artist">
+                            └─ &nbsp; Contain Artists
+                          </span>
+                        </td>
                         <td colSpan={2}>
                           {artistArray.map((item, index) => (
                             <span key={index}>

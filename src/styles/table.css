@@ -8,7 +8,7 @@
 }
 
 #meta-table tr.expandable-row td {
-  padding: 0 0;
+  padding: 10px 0;
   transition: padding .5s ease-in-out;
 }
 
@@ -26,22 +26,4 @@
 
 .alt-row {
   font-size: 14px;
-}
-
-@media screen and (max-width: 650px) {
-  #meta-table tr.expandable-row td {
-    padding: 10px 0;
-  }
-
-  #meta-table tr td:nth-child(1) {
-    width: 25%;
-    min-width: 125px;
-    padding: 0px 10px 0px 10px;
-  }
-
-  #meta-table tr td:nth-child(3) {
-    text-align: center;
-    width: 15%;
-    padding: 0 10px;
-  }
 }
