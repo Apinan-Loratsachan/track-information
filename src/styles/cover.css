@@ -16,14 +16,19 @@
 .album-cover-container {
   position: relative;
   translate: 0px -2.5px;
-  padding: 0px;
+  padding: 10px;
   transition: all .5s ease-in-out;
 }
 
 .header-title {
   translate: 0px -9px;
   transition: translate 0.5s ease-in-out, font-size 0.5s ease-in-out;
-  /* Specify transition for translate only */
+}
+
+@media screen and (min-width: 470px) {
+  .album-cover-container {
+    padding: 22px;
+  }
 }
 
 @media screen and (min-width: 600px) {

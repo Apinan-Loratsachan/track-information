@@ -10,15 +10,17 @@
   .card {
     scale: 0.8;
   }
+
   .card-container {
     padding: 0;
   }
-  
+
 }
 
 .card-container {
   min-width: 300px;
   transition: all 0.3s ease;
+
   &:hover {
     scale: 1.05;
   }

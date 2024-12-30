@@ -9,7 +9,7 @@
 
 #meta-table tr.expandable-row td {
   padding: 0 0;
-  transition: all .5s ease-in-out;
+  transition: padding .5s ease-in-out;
 }
 
 #meta-table tr td:nth-child(1) {

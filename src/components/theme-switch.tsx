@@ -77,9 +77,11 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
               : "rgba(255, 255, 255, 0.8)"
             : "transparent",
         transition: "background-color 0.3s ease-in-out",
+        pointerEvents: isScrolled && isSmallScreen ? "all" : "none",
       }}
     >
       <Component
+        style={{ pointerEvents: "all" }}
         {...getBaseProps({
           className: clsx(
             "px-px transition-opacity hover:opacity-80 cursor-pointer",
