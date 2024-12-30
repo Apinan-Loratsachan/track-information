@@ -76,6 +76,8 @@ function Main() {
   const [spotifyAlbumName, setSpotifyAlbumName] = useState<string>("");
   const [spotifyTrackName, setSpotifyTrackName] = useState<string>("");
   const [spotifyTrackUrl, setSpotifyTrackUrl] = useState<string>("");
+  const [spotifyAlbumEmbedHeight, setSpotifyAlbumEmbedHeight] =
+    useState<number>(0);
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -172,6 +174,7 @@ function Main() {
                 setSpotifyAlbumEmbed(
                   `https://open.spotify.com/embed/album/${data.id}`
                 );
+                setSpotifyAlbumEmbedHeight(data.tracks.items.length * 51 + 220);
                 setSpotifyTrackName(trackData.name);
                 setSpotifyTrackUrl(trackData.external_urls.spotify);
                 setTimeout(() => {
@@ -186,6 +189,7 @@ function Main() {
             setSpotifyAlbumEmbed(
               `https://open.spotify.com/embed/album/${data.id}`
             );
+            setSpotifyAlbumEmbedHeight(data.tracks.items.length * 51 + 220);
             setSpotifyTrackName(data.tracks.items[trackNumber - 1].name);
             setSpotifyTrackUrl(
               data.tracks.items[trackNumber - 1].external_urls.spotify
@@ -958,6 +962,7 @@ function Main() {
                       title="Spotify-Album-Embed"
                       className="animate__animated animate__zoomIn animate__delay-1s"
                       src={spotifyAlbumEmbed}
+                      style={{ height: spotifyAlbumEmbedHeight + "px" }}
                       height="100%"
                       allow="encrypted-media"
                     />

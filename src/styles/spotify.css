@@ -18,11 +18,12 @@
 
 #spotify-album-embed-iframe {
   border-radius: 15px;
-  height: 40vh;
+  min-height: 400px !important;
+  max-height: 80vh !important;
 }
 
 @media screen and (max-width: 640px) {
   #spotify-album-embed-iframe {
-    height: 60vh;
+    max-height: 75vh !important;
   }
 }
