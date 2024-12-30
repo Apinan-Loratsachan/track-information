@@ -65,6 +65,7 @@ function Main() {
   const [spotifyEmbed, setSpotifyEmbed] = useState<string>("");
   const [spotifyEmbedOpacity, setSpotifyEmbedOpacity] = useState<number>(0);
   const [searchWarning, setSearchWarning] = useState<boolean>(false);
+  const [spotifyAlbumName, setSpotifyAlbumName] = useState<string>("");
 
   const { setTheme, theme } = useTheme();
   const isDarkMode = typeof window !== "undefined" ? theme === "dark" : false;
@@ -119,6 +120,7 @@ function Main() {
 
           const data = await response.json();
           setAlbumData(data);
+          setSpotifyAlbumName(data.name);
 
           // Set background image
           const bg = document.getElementById("background") as HTMLDivElement;
@@ -208,6 +210,7 @@ function Main() {
           const data = await response.json();
           console.log(data);
           setAlbumData(data);
+          setSpotifyAlbumName(data.name);
 
           // Set favicon
           const favicon = document.createElement("link");
@@ -234,6 +237,7 @@ function Main() {
         const data = await response.json();
         console.log(data);
         setAlbumData(data);
+        setSpotifyAlbumName(data.albums.items[0].name);
         setCover(data.albums.items[0].images[0].url);
         const favicon = document.createElement("link");
         favicon.rel = "icon";
@@ -268,6 +272,7 @@ function Main() {
           });
         }
       }
+      console.log(albumData);
     };
 
     fetchAlbumData();
@@ -434,8 +439,8 @@ function Main() {
                     <div
                       style={{
                         position: "absolute",
-                        right: 10,
-                        bottom: 0,
+                        right: 50,
+                        bottom: 50,
                         zIndex: 50,
                       }}
                       className="animate__animated animate__fadeIn animate__delay-1s"
@@ -603,8 +608,9 @@ function Main() {
                         </Button>
                       </td>
                     </tr>
-                    {albumData != null ? (
-                      albumData.name.toLowerCase() != album.toLowerCase() ? (
+                    {spotifyAlbumName ? (
+                      spotifyAlbumName.toLowerCase().replaceAll(" ", "") !=
+                      album.toLowerCase().replaceAll(" ", "") ? (
                         <tr className="alt-row">
                           <td>└─ &nbsp; Alt Name</td>
                           <td colSpan={2}>
