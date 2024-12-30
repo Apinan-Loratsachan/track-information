@@ -939,6 +939,7 @@ function Main() {
             isDismissable={false}
             isKeyboardDismissDisabled={true}
             style={{ userSelect: "none" }}
+            scrollBehavior="inside"
             // hideCloseButton
           >
             <ModalContent>
@@ -956,6 +957,7 @@ function Main() {
                         left: "50%",
                         translate: "-50% -50%",
                       }}
+                      className="animate__animated animate__zoomOut animate__delay-2s"
                     />
                     <iframe
                       id="spotify-album-embed-iframe"
