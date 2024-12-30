@@ -10,6 +10,8 @@ export default function SearchCard({
   image,
   padding,
   textWhite,
+  isDirectURL,
+  directURL,
 }: {
   searchProvider: string;
   track: string;
@@ -17,6 +19,8 @@ export default function SearchCard({
   image: string;
   padding: string;
   textWhite: boolean;
+  isDirectURL?: boolean;
+  directURL?: string;
 }) {
   const [isHovered, setIsHovered] = useState(false);
   return (
@@ -31,7 +35,9 @@ export default function SearchCard({
             ? "10px 10px 15px 0px rgba(0, 0, 0, 0.3)"
             : "10px 10px 30px 0px rgba(0, 0, 0, 0.2)",
         }}
-        onPress={() => window.open(trackURL + track, "_blank")}
+        onPress={() =>
+          window.open(isDirectURL ? directURL : trackURL + track, "_blank")
+        }
         onMouseEnter={() => {
           setIsHovered(true);
         }}
@@ -51,9 +57,19 @@ export default function SearchCard({
           style={{ height: "40px" }}
         >
           <div>
-            <p
-              className={`${textWhite ? "text-white" : "text-black"} text-tiny`}
-            >{`Search Track on ${searchProvider}`}</p>
+            {isDirectURL ? (
+              <p
+                className={
+                  searchProvider.toLowerCase().trim() == "spotify"
+                    ? "animate-charcter-alt"
+                    : "animate-charcter"
+                }
+              >{`Open on ${searchProvider}`}</p>
+            ) : (
+              <p
+                className={`${textWhite ? "text-white" : "text-black"} text-tiny`}
+              >{`Search Track on ${searchProvider}`}</p>
+            )}
           </div>
         </CardFooter>
       </Card>

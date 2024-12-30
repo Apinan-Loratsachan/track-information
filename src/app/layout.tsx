@@ -5,6 +5,7 @@ import "@/src/styles/cover.css";
 import "@/src/styles/spotify.css";
 import "@/src/styles/card.css";
 import "@/src/styles/animate-delay.css";
+import "@/src/styles/text.css";
 import "animate.css";
 import bg from "../../public/background.jpg";
 import { Metadata, Viewport } from "next";

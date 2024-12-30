@@ -63,6 +63,7 @@ function Main() {
   const spotifyAlbumId = searchParams.get("aref");
   const spotifyTrackId = searchParams.get("tref");
   const spotifyCoverId = searchParams.get("cref");
+  const youtubeVideoId = searchParams.get("v") || null;
 
   const [albumData, setAlbumData] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
@@ -74,6 +75,7 @@ function Main() {
   const [searchWarning, setSearchWarning] = useState<boolean>(false);
   const [spotifyAlbumName, setSpotifyAlbumName] = useState<string>("");
   const [spotifyTrackName, setSpotifyTrackName] = useState<string>("");
+  const [spotifyTrackUrl, setSpotifyTrackUrl] = useState<string>("");
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -171,6 +173,7 @@ function Main() {
                   `https://open.spotify.com/embed/album/${data.id}`
                 );
                 setSpotifyTrackName(trackData.name);
+                setSpotifyTrackUrl(trackData.external_urls.spotify);
                 setTimeout(() => {
                   setSpotifyEmbedOpacity(1);
                 }, 1000);
@@ -184,6 +187,9 @@ function Main() {
               `https://open.spotify.com/embed/album/${data.id}`
             );
             setSpotifyTrackName(data.tracks.items[trackNumber - 1].name);
+            setSpotifyTrackUrl(
+              data.tracks.items[trackNumber - 1].external_urls.spotify
+            );
             setTimeout(() => {
               setSpotifyEmbedOpacity(1);
             }, 1000);
@@ -277,6 +283,7 @@ function Main() {
         }
         const data = await response.json();
         setSpotifyTrackName(data.name);
+        setSpotifyTrackUrl(data.external_urls.spotify);
         setTimeout(() => {
           setSpotifyEmbedOpacity(1);
         }, 1000);
@@ -676,7 +683,11 @@ function Main() {
                             <span key={index}>
                               <Link
                                 className="alt-row"
-                                href={"https://www.google.com/search?q=" + item}
+                                href={
+                                  "https://www.google.com/search?q=" +
+                                  item +
+                                  " - artist"
+                                }
                                 target="_blank"
                                 underline="hover"
                               >
@@ -705,7 +716,11 @@ function Main() {
                       </td>
                       <td>
                         <Link
-                          href={"https://www.google.com/search?q=" + album}
+                          href={
+                            "https://www.google.com/search?q=" +
+                            album +
+                            " - album"
+                          }
                           target="_blank"
                           underline="hover"
                         >
@@ -736,7 +751,8 @@ function Main() {
                               className="alt-row"
                               href={
                                 "https://www.google.com/search?q=" +
-                                albumData.name
+                                albumData.name +
+                                " - album"
                               }
                               target={"_blank"}
                               underline="hover"
@@ -753,7 +769,9 @@ function Main() {
                         <td>
                           <Link
                             href={
-                              "https://www.google.com/search?q=" + albumArtist
+                              "https://www.google.com/search?q=" +
+                              albumArtist +
+                              " - artist"
                             }
                             target="_blank"
                             underline="hover"
@@ -871,7 +889,7 @@ function Main() {
                     textWhite={false}
                     track={title + " " + artist}
                     trackURL="https://www.google.com/search?q="
-                  ></SearchCard>
+                  />
                   <SearchCard
                     searchProvider="YouTube"
                     image="/youtube.jpg"
@@ -879,7 +897,9 @@ function Main() {
                     textWhite={false}
                     track={title + " " + artist}
                     trackURL="https://www.youtube.com/results?search_query="
-                  ></SearchCard>
+                    isDirectURL={youtubeVideoId != null}
+                    directURL={`https://www.youtube.com/watch?v=${youtubeVideoId}`}
+                  />
                   <SearchCard
                     searchProvider="Spotify"
                     image="/spotify.jpg"
@@ -887,7 +907,13 @@ function Main() {
                     textWhite={true}
                     track={title + " " + artist}
                     trackURL="https://open.spotify.com/search/"
-                  ></SearchCard>
+                    isDirectURL={
+                      spotifyTrackUrl != null &&
+                      spotifyTrackUrl != "" &&
+                      spotifyTrackUrl != undefined
+                    }
+                    directURL={spotifyTrackUrl}
+                  />
                   <SearchCard
                     searchProvider="Apple Music"
                     image="/apple_music.jpg"
