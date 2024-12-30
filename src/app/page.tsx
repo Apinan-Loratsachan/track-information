@@ -529,7 +529,7 @@ function Main() {
               <div className="w-full">
                 <table id="meta-table">
                   <tbody>
-                    <tr>
+                    <tr className="expandable-row">
                       <td>Title</td>
                       <td>
                         <Link
@@ -555,13 +555,13 @@ function Main() {
                       </td>
                     </tr>
                     {!spotifyTrackName && alternatTitle ? (
-                      <tr className="alt-row">
+                      <tr className="expandable-row alt-row">
                         <td>└─ &nbsp; Alt Title</td>
                         <td colSpan={2}>
                           {alternatTitleArray.map((item, index) => (
                             <span key={index}>
                               <Link
-                                className="alt-row"
+                                className="expandable-row alt-row"
                                 href={"https://www.google.com/search?q=" + item}
                                 target="_blank"
                                 underline="hover"
@@ -579,7 +579,7 @@ function Main() {
                     {spotifyTrackName && !alternatTitle ? (
                       spotifyTrackName.toLowerCase().replaceAll(" ", "") !=
                       title.toLowerCase().replaceAll(" ", "") ? (
-                        <tr className="alt-row">
+                        <tr className="expandable-row alt-row">
                           <td>└─ &nbsp; Alt Title</td>
                           <td colSpan={2}>
                             <Link
@@ -597,13 +597,13 @@ function Main() {
                       ) : null
                     ) : null}
                     {spotifyTrackName && alternatTitle ? (
-                      <tr className="alt-row">
+                      <tr className="expandable-row alt-row">
                         <td>└─ &nbsp; Alt Title</td>
                         <td colSpan={2}>
                           {alternatTitleArray.map((item, index) => (
                             <span key={index}>
                               <Link
-                                className="alt-row"
+                                className="expandable-row alt-row"
                                 href={"https://www.google.com/search?q=" + item}
                                 target="_blank"
                                 underline="hover"
@@ -635,7 +635,7 @@ function Main() {
                       </tr>
                     ) : null}
                     {artist != "Various Artists" ? (
-                      <tr>
+                      <tr className="expandable-row">
                         <td>Artist</td>
                         <td>
                           <Link
@@ -661,7 +661,7 @@ function Main() {
                         </td>
                       </tr>
                     ) : (
-                      <tr>
+                      <tr className="expandable-row">
                         <td>Artist</td>
                         <td>{artist}</td>
                         <td>
@@ -676,13 +676,13 @@ function Main() {
                       </tr>
                     )}
                     {artistArray.length > 1 ? (
-                      <tr className="alt-row">
+                      <tr className="expandable-row alt-row">
                         <td>└─ &nbsp; Contain Artists</td>
                         <td colSpan={2}>
                           {artistArray.map((item, index) => (
                             <span key={index}>
                               <Link
-                                className="alt-row"
+                                className="expandable-row alt-row"
                                 href={
                                   "https://www.google.com/search?q=" +
                                   item +
@@ -699,7 +699,7 @@ function Main() {
                         </td>
                       </tr>
                     ) : null}
-                    <tr>
+                    <tr className="expandable-row">
                       <td>
                         Album{" "}
                         {spotifyAlbumEmbed ? (
@@ -744,11 +744,11 @@ function Main() {
                     {spotifyAlbumName ? (
                       spotifyAlbumName.toLowerCase().replaceAll(" ", "") !=
                       album.toLowerCase().replaceAll(" ", "") ? (
-                        <tr className="alt-row">
+                        <tr className="expandable-row alt-row">
                           <td>└─ &nbsp; Alt Name</td>
                           <td colSpan={2}>
                             <Link
-                              className="alt-row"
+                              className="expandable-row alt-row"
                               href={
                                 "https://www.google.com/search?q=" +
                                 albumData.name +
@@ -764,7 +764,7 @@ function Main() {
                       ) : null
                     ) : null}
                     {albumArtist != "Various Artists" ? (
-                      <tr>
+                      <tr className="expandable-row">
                         <td>Album Artist</td>
                         <td>
                           <Link
@@ -796,7 +796,7 @@ function Main() {
                         </td>
                       </tr>
                     ) : (
-                      <tr>
+                      <tr className="expandable-row">
                         <td>Album Artist</td>
                         <td>{albumArtist}</td>
                         <td>
