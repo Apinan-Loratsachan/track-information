@@ -58,6 +58,7 @@ function Main() {
   const year = searchParams.get("y") || "Unknown";
   const language = searchParams.get("lang") || "Unknown";
   const related = searchParams.get("rel") || "";
+  const alternatTitle = searchParams.get("atr");
   const customAlbumCover = searchParams.get("cti");
   const spotifyAlbumId = searchParams.get("aref");
   const spotifyTrackId = searchParams.get("tref");
@@ -72,6 +73,7 @@ function Main() {
   const [spotifyEmbedOpacity, setSpotifyEmbedOpacity] = useState<number>(0);
   const [searchWarning, setSearchWarning] = useState<boolean>(false);
   const [spotifyAlbumName, setSpotifyAlbumName] = useState<string>("");
+  const [spotifyTrackName, setSpotifyTrackName] = useState<string>("");
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -109,6 +111,11 @@ function Main() {
     )
     .filter((artist) => artist.trim() !== "")
     .map((artist) => artist.trim());
+
+  const alternatTitleArray = alternatTitle!
+    .split(";")
+    .filter((title) => title.trim() !== "")
+    .map((title) => title.trim());
 
   useEffect(() => {
     const fetchAlbumData = async () => {
@@ -165,6 +172,7 @@ function Main() {
                 setSpotifyAlbumEmbed(
                   `https://open.spotify.com/embed/album/${data.id}`
                 );
+                setSpotifyTrackName(trackData.name);
                 setTimeout(() => {
                   setSpotifyEmbedOpacity(1);
                 }, 1000);
@@ -177,6 +185,7 @@ function Main() {
             setSpotifyAlbumEmbed(
               `https://open.spotify.com/embed/album/${data.id}`
             );
+            setSpotifyTrackName(data.tracks.items[trackNumber - 1].name);
             setTimeout(() => {
               setSpotifyEmbedOpacity(1);
             }, 1000);
@@ -264,6 +273,15 @@ function Main() {
         setSpotifyEmbed(
           `https://open.spotify.com/embed/track/${spotifyTrackId}`
         );
+        const response = await fetch(
+          `/api/spotify/getTrackData?spotifyTrackId=${spotifyTrackId}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch album data");
+        }
+        const data = await response.json();
+        setSpotifyTrackName(data.name);
+        console.log(spotifyTrackName);
         setTimeout(() => {
           setSpotifyEmbedOpacity(1);
         }, 1000);
@@ -282,7 +300,6 @@ function Main() {
           });
         }
       }
-      console.log(albumData);
     };
 
     fetchAlbumData();
@@ -535,6 +552,86 @@ function Main() {
                         </Button>
                       </td>
                     </tr>
+                    {!spotifyTrackName && alternatTitle ? (
+                      <tr className="alt-row">
+                        <td>└─ &nbsp; Alt Title</td>
+                        <td colSpan={2}>
+                          {alternatTitleArray.map((item, index) => (
+                            <span key={index}>
+                              <Link
+                                className="alt-row"
+                                href={"https://www.google.com/search?q=" + item}
+                                target="_blank"
+                                underline="hover"
+                              >
+                                {item}
+                              </Link>
+                              {index !== alternatTitleArray.length - 1
+                                ? ", "
+                                : ""}
+                            </span>
+                          ))}
+                        </td>
+                      </tr>
+                    ) : null}
+                    {spotifyTrackName && !alternatTitle ? (
+                      spotifyTrackName.toLowerCase().replaceAll(" ", "") !=
+                      title.toLowerCase().replaceAll(" ", "") ? (
+                        <tr className="alt-row">
+                          <td>└─ &nbsp; Alt Title</td>
+                          <td colSpan={2}>
+                            <Link
+                              href={
+                                "https://www.google.com/search?q=" +
+                                spotifyTrackName
+                              }
+                              target="_blank"
+                              underline="hover"
+                            >
+                              {spotifyTrackName}
+                            </Link>
+                          </td>
+                        </tr>
+                      ) : null
+                    ) : null}
+                    {spotifyTrackName && alternatTitle ? (
+                      <tr className="alt-row">
+                        <td>└─ &nbsp; Alt Title</td>
+                        <td colSpan={2}>
+                          {alternatTitleArray.map((item, index) => (
+                            <span key={index}>
+                              <Link
+                                className="alt-row"
+                                href={"https://www.google.com/search?q=" + item}
+                                target="_blank"
+                                underline="hover"
+                              >
+                                {item}
+                              </Link>
+                              {index !== alternatTitleArray.length - 1
+                                ? ", "
+                                : ""}
+                            </span>
+                          ))}
+                          {spotifyTrackName.toLowerCase().replaceAll(" ", "") !=
+                          title.toLowerCase().replaceAll(" ", "") ? (
+                            <span>
+                              ,&nbsp;
+                              <Link
+                                href={
+                                  "https://www.google.com/search?q=" +
+                                  spotifyTrackName
+                                }
+                                target="_blank"
+                                underline="hover"
+                              >
+                                {spotifyTrackName}
+                              </Link>
+                            </span>
+                          ) : null}
+                        </td>
+                      </tr>
+                    ) : null}
                     {artist != "Various Artists" ? (
                       <tr>
                         <td>Artist</td>
@@ -605,6 +702,7 @@ function Main() {
                             color="success"
                             variant="shadow"
                             onPress={onOpen}
+                            className="animate__animated animate__zoomIn"
                           >
                             <i className="fa-brands fa-spotify fa-xl"></i>
                           </Button>
