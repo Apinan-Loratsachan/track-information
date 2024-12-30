@@ -142,9 +142,7 @@ function Main() {
           favicon.type = "image/jpg";
 
           // Set the cover based on customAlbumCover or albumData
-          console.log(customAlbumCover);
           if (customAlbumCover) {
-            console.log;
             setCover(customAlbumCover);
             favicon.href = customAlbumCover;
             setBackground(`url(${customAlbumCover})`);
@@ -227,7 +225,6 @@ function Main() {
           }
 
           const data = await response.json();
-          console.log(data);
           setAlbumData(data);
           setSpotifyAlbumName(data.name);
 
@@ -254,7 +251,6 @@ function Main() {
           throw new Error("Failed to fetch album data");
         }
         const data = await response.json();
-        console.log(data);
         setAlbumData(data);
         setSpotifyAlbumName(data.albums.items[0].name);
         setCover(data.albums.items[0].images[0].url);
@@ -281,7 +277,6 @@ function Main() {
         }
         const data = await response.json();
         setSpotifyTrackName(data.name);
-        console.log(spotifyTrackName);
         setTimeout(() => {
           setSpotifyEmbedOpacity(1);
         }, 1000);
