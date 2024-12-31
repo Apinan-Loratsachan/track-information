@@ -506,7 +506,9 @@ function Main() {
                   ) : null}
                 </div>
               ) : (
-                <Spinner size="lg" />
+                <div className="p-3">
+                  <Spinner size="lg" />
+                </div>
               )}
             </CardHeader>
             {/* <Divider /> */}
