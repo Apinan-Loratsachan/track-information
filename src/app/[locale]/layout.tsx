@@ -7,15 +7,16 @@ import "@/src/styles/card.css";
 import "@/src/styles/animate-delay.css";
 import "@/src/styles/text.css";
 import "animate.css";
-import bg from "../../public/background.jpg";
+import bg from "../../../public/background.jpg";
 import { Metadata, Viewport } from "next";
 import clsx from "clsx";
 
 import { Providers } from "./providers";
 import { fontSans } from "@/src/config/fonts";
-import { ThemeSwitch } from "../components/theme-switch";
+import { ThemeSwitch } from "../../components/theme-switch";
 
-import { IntlProvider } from "next-intl";
+import { NextIntlClientProvider } from "next-intl";
+console.log(NextIntlClientProvider);
 
 export const metadata: Metadata = {
   title: {
@@ -43,10 +44,13 @@ export default async function RootLayout({
   params: { locale: string };
 }) {
   let messages;
-  locale = "th";
+  console.log("---------------------------------");
+  console.log(locale);
   try {
     messages = (await import(`@/src/app/locales/${locale}/common.json`))
       .default;
+    console.log("---------------------------------");
+    console.log(messages);
   } catch (error) {
     console.error(`Could not load messages for locale: ${locale}`, error);
   }
@@ -65,14 +69,14 @@ export default async function RootLayout({
           fontSans.variable
         )}
       >
-        <IntlProvider messages={messages} locale={locale}>
+        <NextIntlClientProvider messages={messages} locale={locale}>
           <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
             <div style={{ background: "transparent" }}>
               <ThemeSwitch />
               <div style={{ padding: "50px 0" }}>{children}</div>
             </div>
           </Providers>
-        </IntlProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

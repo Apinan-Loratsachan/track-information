@@ -22,15 +22,15 @@ import {
 } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 import { Suspense } from "react";
-import SearchCard from "../components/search-card";
+import SearchCard from "../../components/search-card";
 import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
-import NoSsr from "../components/no-ssr";
+import NoSsr from "../../components/no-ssr";
 import React from "react";
 import { useTranslations } from "next-intl";
 
 const BackgroundOverlay = dynamic(
-  () => import("../components/background-overlay"),
+  () => import("../../components/background-overlay"),
   { ssr: false }
 );
 
