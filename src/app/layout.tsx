@@ -15,6 +15,9 @@ import { Providers } from "./providers";
 import { fontSans } from "@/src/config/fonts";
 import { ThemeSwitch } from "../components/theme-switch";
 
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
+
 export const metadata: Metadata = {
   title: {
     default: "Track Information",
@@ -33,11 +36,16 @@ export const viewport: Viewport = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const locale = await getLocale();
+
+  // Providing all messages to the client
+  // side is the easiest way to get started
+  const messages = await getMessages();
   return (
     <html suppressHydrationWarning lang="en">
       <head>
@@ -53,12 +61,14 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
-          <div style={{ background: "transparent" }}>
-            <ThemeSwitch />
-            <div style={{ padding: "50px 0" }}>{children}</div>
-          </div>
-        </Providers>
+        <NextIntlClientProvider messages={messages}>
+          <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
+            <div style={{ background: "transparent" }}>
+              <ThemeSwitch />
+              <div style={{ padding: "50px 0" }}>{children}</div>
+            </div>
+          </Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

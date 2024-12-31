@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, CardFooter, Image } from "@nextui-org/react";
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 
 export default function SearchCard({
@@ -23,6 +24,7 @@ export default function SearchCard({
   directURL?: string;
 }) {
   const [isHovered, setIsHovered] = useState(false);
+  const t = useTranslations();
   return (
     <div className="card-container p-3">
       <Card
@@ -64,11 +66,11 @@ export default function SearchCard({
                     ? "animate-charcter-alt"
                     : "animate-charcter"
                 }
-              >{`Open on ${searchProvider}`}</p>
+              >{`${t("open_on")} ${searchProvider}`}</p>
             ) : (
               <p
                 className={`${textWhite ? "text-white" : "text-black"} text-tiny`}
-              >{`Search Track on ${searchProvider}`}</p>
+              >{`${t("search_track_on")} ${searchProvider}`}</p>
             )}
           </div>
         </CardFooter>

@@ -1,11 +1,13 @@
 "use client";
 
 import { Card, CardBody, CardHeader, Divider } from "@nextui-org/react";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 
 export default function NotFound() {
   const { setTheme, theme } = useTheme();
   const isDarkMode = typeof window !== "undefined" ? theme === "dark" : false;
+  const t = useTranslations();
   return (
     <div className="flex items-center justify-center">
       <Card
@@ -31,7 +33,7 @@ export default function NotFound() {
         </CardHeader>
         <Divider />
         <CardBody className="text-center justify-center items-center">
-          The page you are looking for does not exist.
+          {t("404")}
         </CardBody>
       </Card>
     </div>

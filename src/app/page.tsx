@@ -27,6 +27,7 @@ import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 import NoSsr from "../components/no-ssr";
 import React from "react";
+import { useTranslations } from "next-intl";
 
 const BackgroundOverlay = dynamic(
   () => import("../components/background-overlay"),
@@ -42,6 +43,8 @@ export default function Home() {
 }
 
 function Main() {
+  const t = useTranslations();
+
   const searchParams = useSearchParams();
   const title = searchParams.get("tr") || "Unknown";
   const artist = searchParams.get("ar") || "Unknown";
@@ -483,10 +486,11 @@ function Main() {
                         showArrow
                         content={
                           <div className="px-1 py-2">
-                            <div className="text-small font-bold">Warning</div>
+                            <div className="text-small font-bold">
+                              {t("warning")}
+                            </div>
                             <div className="text-tiny">
-                              This cover is from a search result. It may not be
-                              the actual cover of the album.
+                              {t("search_warning")}
                             </div>
                           </div>
                         }
@@ -531,7 +535,7 @@ function Main() {
                 <table id="meta-table">
                   <tbody>
                     <tr className="expandable-row">
-                      <td>Title</td>
+                      <td>{t("title")}</td>
                       <td>
                         <Link
                           href={"https://www.google.com/search?q=" + title}
@@ -551,13 +555,13 @@ function Main() {
                             setAlertMessage(title);
                           }}
                         >
-                          Copy
+                          {t("copy")}
                         </Button>
                       </td>
                     </tr>
                     {!spotifyTrackName && alternatTitle ? (
                       <tr className="expandable-row alt-row">
-                        <td>└─ &nbsp; Alt Title</td>
+                        <td>└─ &nbsp; {t("alt_title")}</td>
                         <td colSpan={2}>
                           {alternatTitleArray.map((item, index) => (
                             <span key={index}>
@@ -581,7 +585,7 @@ function Main() {
                       spotifyTrackName.toLowerCase().replaceAll(" ", "") !=
                       title.toLowerCase().replaceAll(" ", "") ? (
                         <tr className="expandable-row alt-row">
-                          <td>└─ &nbsp; Alt Title</td>
+                          <td>└─ &nbsp; {t("alt_title")}</td>
                           <td colSpan={2}>
                             <Link
                               href={
@@ -599,7 +603,7 @@ function Main() {
                     ) : null}
                     {spotifyTrackName && alternatTitle ? (
                       <tr className="expandable-row alt-row">
-                        <td>└─ &nbsp; Alt Title</td>
+                        <td>└─ &nbsp; {t("alt_title")}</td>
                         <td colSpan={2}>
                           {alternatTitleArray.map((item, index) => (
                             <span key={index}>
@@ -637,7 +641,7 @@ function Main() {
                     ) : null}
                     {artist != "Various Artists" ? (
                       <tr className="expandable-row">
-                        <td>Artist</td>
+                        <td>{t("artist")}</td>
                         <td>
                           <Link
                             href={"https://www.google.com/search?q=" + artist}
@@ -657,7 +661,7 @@ function Main() {
                               setAlertMessage(artist);
                             }}
                           >
-                            Copy
+                            {t("copy")}
                           </Button>
                         </td>
                       </tr>
@@ -671,7 +675,7 @@ function Main() {
                             disabled
                             style={{ pointerEvents: "none" }}
                           >
-                            Copy
+                            {t("copy")}
                           </Button>
                         </td>
                       </tr>
@@ -680,7 +684,7 @@ function Main() {
                       <tr className="expandable-row alt-row">
                         <td>
                           <span id="contain-artist">
-                            └─ &nbsp; Contain Artists
+                            └─ &nbsp; {t("contain_artists")}
                           </span>
                         </td>
                         <td colSpan={2}>
@@ -706,7 +710,7 @@ function Main() {
                     ) : null}
                     <tr className="expandable-row">
                       <td>
-                        Album{" "}
+                        {t("album")}{" "}
                         {spotifyAlbumEmbed ? (
                           <Button
                             isIconOnly
@@ -742,7 +746,7 @@ function Main() {
                             setAlertMessage(album);
                           }}
                         >
-                          Copy
+                          {t("copy")}
                         </Button>
                       </td>
                     </tr>
@@ -750,7 +754,7 @@ function Main() {
                       spotifyAlbumName.toLowerCase().replaceAll(" ", "") !=
                       album.toLowerCase().replaceAll(" ", "") ? (
                         <tr className="expandable-row alt-row">
-                          <td>└─ &nbsp; Alt Name</td>
+                          <td>└─ &nbsp; {t("alt_album")}</td>
                           <td colSpan={2}>
                             <Link
                               className="expandable-row alt-row"
@@ -770,7 +774,7 @@ function Main() {
                     ) : null}
                     {albumArtist != "Various Artists" ? (
                       <tr className="expandable-row">
-                        <td>Album Artist</td>
+                        <td>{t("album_artist")}</td>
                         <td>
                           <Link
                             href={
@@ -796,7 +800,7 @@ function Main() {
                               setAlertMessage(albumArtist);
                             }}
                           >
-                            Copy
+                            {t("copy")}
                           </Button>
                         </td>
                       </tr>
@@ -810,13 +814,13 @@ function Main() {
                             disabled
                             style={{ pointerEvents: "none" }}
                           >
-                            Copy
+                            {t("copy")}
                           </Button>
                         </td>
                       </tr>
                     )}
                     <tr>
-                      <td>Disc</td>
+                      <td>{t("disc")}</td>
                       <td colSpan={2}>
                         {`${discNumber == 0 ? "Unknown" : discNumber}/${
                           discCount == 0 ? "Unknown" : discCount
@@ -824,29 +828,29 @@ function Main() {
                       </td>
                     </tr>
                     <tr>
-                      <td>Track</td>
+                      <td>{t("track")}</td>
                       <td
                         colSpan={2}
                       >{`${trackNumber == 0 ? "Unknown" : trackNumber}/${trackCount == 0 ? "Unknown" : trackCount}`}</td>
                     </tr>
                     <tr>
-                      <td>Length</td>
+                      <td>{t("length")}</td>
                       <td colSpan={2}>{length}</td>
                     </tr>
                     <tr>
-                      <td>Genre</td>
+                      <td>{t("genre")}</td>
                       <td colSpan={2}>{genre}</td>
                     </tr>
                     <tr>
-                      <td>Year</td>
+                      <td>{t("year")}</td>
                       <td colSpan={2}>{year}</td>
                     </tr>
                     <tr>
-                      <td>Language</td>
+                      <td>{t("language")}</td>
                       <td colSpan={2}>{language}</td>
                     </tr>
                     <tr>
-                      <td>Related</td>
+                      <td>{t("related")}</td>
                       <td colSpan={2}>
                         {(splitRelated.length > 1 &&
                           splitRelated.map((relatedItem, index) => (

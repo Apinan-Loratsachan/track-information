@@ -8,6 +8,9 @@ import { useIsSSR } from "@react-aria/ssr";
 import clsx from "clsx";
 
 import { SunFilledIcon, MoonFilledIcon } from "@/src/components/icons";
+import LanguageSwitcher from "./language-switch";
+import NoSsr from "./no-ssr";
+import { Card, CardBody } from "@nextui-org/react";
 
 export interface ThemeSwitchProps {
   className?: string;
@@ -43,11 +46,11 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50); // Adjust threshold as needed
+      setIsScrolled(window.scrollY > 0); // Adjust threshold as needed
     };
 
     const handleResize = () => {
-      setIsSmallScreen(window.innerWidth < 890);
+      setIsSmallScreen(window.innerWidth < 930);
     };
 
     // Set initial screen size state
@@ -80,45 +83,59 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
         pointerEvents: isScrolled && isSmallScreen ? "all" : "none",
       }}
     >
-      <Component
-        style={{ pointerEvents: "all" }}
-        {...getBaseProps({
-          className: clsx(
-            "px-px transition-opacity hover:opacity-80 cursor-pointer",
-            className,
-            classNames?.base
-          ),
-        })}
+      <NoSsr>
+        <LanguageSwitcher />
+      </NoSsr>
+      <Card
+        isBlurred
+        style={{
+          pointerEvents: "all",
+          backgroundColor: isDarkMode
+            ? "hsla(0,0%,0%,.8)"
+            : "hsla(0,0%,100%,.8)",
+        }}
       >
-        <VisuallyHidden>
-          <input {...getInputProps()} />
-        </VisuallyHidden>
-        <div
-          {...getWrapperProps()}
-          className={slots.wrapper({
-            class: clsx(
-              [
-                "w-auto h-auto",
-                "bg-transparent",
-                "rounded-lg",
-                "flex items-center justify-center",
-                "group-data-[selected=true]:bg-transparent",
-                "!text-default-500",
-                "pt-px",
-                "px-0",
-                "mx-0",
-              ],
-              classNames?.wrapper
-            ),
-          })}
-        >
-          {!isSelected || isSSR ? (
-            <SunFilledIcon size={22} />
-          ) : (
-            <MoonFilledIcon size={22} color="gray" />
-          )}
-        </div>
-      </Component>
+        <CardBody style={{ padding: "1px 1px" }}>
+          <Component
+            {...getBaseProps({
+              className: clsx(
+                "px-px transition-opacity hover:opacity-80 cursor-pointer",
+                className,
+                classNames?.base
+              ),
+            })}
+          >
+            <VisuallyHidden>
+              <input {...getInputProps()} />
+            </VisuallyHidden>
+            <div
+              {...getWrapperProps()}
+              className={slots.wrapper({
+                class: clsx(
+                  [
+                    "w-auto h-auto",
+                    "bg-transparent",
+                    "rounded-lg",
+                    "flex items-center justify-center",
+                    "group-data-[selected=true]:bg-transparent",
+                    "!text-default-500",
+                    "pt-px",
+                    "px-0",
+                    "mx-0",
+                  ],
+                  classNames?.wrapper
+                ),
+              })}
+            >
+              {!isSelected || isSSR ? (
+                <SunFilledIcon size={22} className="text-foreground" />
+              ) : (
+                <MoonFilledIcon size={22} className="text-foreground" />
+              )}
+            </div>
+          </Component>
+        </CardBody>
+      </Card>
     </div>
   );
 };
