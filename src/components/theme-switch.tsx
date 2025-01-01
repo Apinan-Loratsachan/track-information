@@ -65,77 +65,77 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
   }, []);
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        zIndex: 1000,
-        width: "100vw",
-        display: "flex",
-        justifyContent: "end",
-        padding: "10px 25px",
-        backgroundColor:
-          isScrolled && isSmallScreen
-            ? isDarkMode
-              ? "rgba(0, 0, 0, 0.8)"
-              : "rgba(255, 255, 255, 0.8)"
-            : "transparent",
-        transition: "background-color 0.3s ease-in-out",
-        pointerEvents: isScrolled && isSmallScreen ? "all" : "none",
-      }}
-    >
-      <NoSsr>
-        <LanguageSwitcher />
-      </NoSsr>
-      <Card
-        isBlurred
+    <NoSsr>
+      <div
         style={{
-          pointerEvents: "all",
-          backgroundColor: isDarkMode
-            ? "hsla(0,0%,0%,.8)"
-            : "hsla(0,0%,100%,.8)",
+          position: "fixed",
+          zIndex: 1000,
+          width: "100vw",
+          display: "flex",
+          justifyContent: "end",
+          padding: "10px 25px",
+          backgroundColor:
+            isScrolled && isSmallScreen
+              ? isDarkMode
+                ? "rgba(0, 0, 0, 0.8)"
+                : "rgba(255, 255, 255, 0.8)"
+              : "transparent",
+          transition: "background-color 0.3s ease-in-out",
+          pointerEvents: isScrolled && isSmallScreen ? "all" : "none",
         }}
       >
-        <CardBody style={{ padding: "1px 1px" }}>
-          <Component
-            {...getBaseProps({
-              className: clsx(
-                "px-px transition-opacity hover:opacity-80 cursor-pointer",
-                className,
-                classNames?.base
-              ),
-            })}
-          >
-            <VisuallyHidden>
-              <input {...getInputProps()} />
-            </VisuallyHidden>
-            <div
-              {...getWrapperProps()}
-              className={slots.wrapper({
-                class: clsx(
-                  [
-                    "w-auto h-auto",
-                    "bg-transparent",
-                    "rounded-lg",
-                    "flex items-center justify-center",
-                    "group-data-[selected=true]:bg-transparent",
-                    "!text-default-500",
-                    "pt-px",
-                    "px-0",
-                    "mx-0",
-                  ],
-                  classNames?.wrapper
+        <LanguageSwitcher />
+        <Card
+          isBlurred
+          style={{
+            pointerEvents: "all",
+            backgroundColor: isDarkMode
+              ? "hsla(0,0%,0%,.8)"
+              : "hsla(0,0%,100%,.8)",
+          }}
+        >
+          <CardBody style={{ padding: "1px 1px" }}>
+            <Component
+              {...getBaseProps({
+                className: clsx(
+                  "px-px transition-opacity hover:opacity-80 cursor-pointer",
+                  className,
+                  classNames?.base
                 ),
               })}
             >
-              {!isSelected || isSSR ? (
-                <SunFilledIcon size={22} className="text-foreground" />
-              ) : (
-                <MoonFilledIcon size={22} className="text-foreground" />
-              )}
-            </div>
-          </Component>
-        </CardBody>
-      </Card>
-    </div>
+              <VisuallyHidden>
+                <input {...getInputProps()} />
+              </VisuallyHidden>
+              <div
+                {...getWrapperProps()}
+                className={slots.wrapper({
+                  class: clsx(
+                    [
+                      "w-auto h-auto",
+                      "bg-transparent",
+                      "rounded-lg",
+                      "flex items-center justify-center",
+                      "group-data-[selected=true]:bg-transparent",
+                      "!text-default-500",
+                      "pt-px",
+                      "px-0",
+                      "mx-0",
+                    ],
+                    classNames?.wrapper
+                  ),
+                })}
+              >
+                {!isSelected || isSSR ? (
+                  <SunFilledIcon size={22} className="text-foreground" />
+                ) : (
+                  <MoonFilledIcon size={22} className="text-foreground" />
+                )}
+              </div>
+            </Component>
+          </CardBody>
+        </Card>
+      </div>
+    </NoSsr>
   );
 };
