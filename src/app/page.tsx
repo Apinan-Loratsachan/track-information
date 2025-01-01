@@ -402,7 +402,7 @@ function Main() {
                 color="success"
                 description={alertMessage}
                 isVisible={isVisible}
-                title={`Copied ${alertTitle}`}
+                title={`${t("copied")} ${alertTitle}`}
                 variant="faded"
                 onClose={() => setIsVisible(false)}
                 style={{
@@ -553,7 +553,7 @@ function Main() {
                           onPress={(event) => {
                             navigator.clipboard.writeText(title as string);
                             displayAlert();
-                            setAlertTitle("Title");
+                            setAlertTitle(t("title"));
                             setAlertMessage(title);
                           }}
                         >
@@ -659,7 +659,7 @@ function Main() {
                             onPress={(event) => {
                               navigator.clipboard.writeText(artist as string);
                               displayAlert();
-                              setAlertTitle("Artist");
+                              setAlertTitle(t("artist"));
                               setAlertMessage(artist);
                             }}
                           >
@@ -744,7 +744,7 @@ function Main() {
                           onPress={(event) => {
                             navigator.clipboard.writeText(album as string);
                             displayAlert();
-                            setAlertTitle("Album");
+                            setAlertTitle(t("album"));
                             setAlertMessage(album);
                           }}
                         >
@@ -798,7 +798,7 @@ function Main() {
                                 albumArtist as string
                               );
                               displayAlert();
-                              setAlertTitle("Album Artist");
+                              setAlertTitle(t("album_artist"));
                               setAlertMessage(albumArtist);
                             }}
                           >
