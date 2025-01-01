@@ -134,8 +134,8 @@ const LanguageSwitcher = () => {
                           paddingRight: "20px",
                           pointerEvents: locale == newLocale ? "none" : "all",
                         }}
-                        variant="shadow"
-                        color={newLocale == locale ? "default" : "primary"}
+                        variant={locale == newLocale ? "flat" : "shadow"}
+                        color={locale == newLocale ? "default" : "primary"}
                       >
                         {t("apply")}
                       </Button>
