@@ -25,5 +25,8 @@
     "close": "ปิด",
     "cancel": "ยกเลิก",
     "apply": "ใช้",
-    "applying": "กําลังปรับใช้"
+    "applying": "กําลังปรับใช้",
+    "website_title": "ข้อมูลเพลง",
+    "website_cover_page_title": "ภาพปก | ข้อมูลเพลง",
+    "cover": "ภาพปก"
 }

@@ -25,5 +25,8 @@
     "close": "Close",
     "cancel": "Cancel",
     "apply": "Apply",
-    "applying": "Applying"
+    "applying": "Applying",
+    "website_title": "Track Information",
+    "website_cover_page_title": "Cover | Track Information",
+    "cover": "Cover"
 }

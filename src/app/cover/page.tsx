@@ -5,6 +5,7 @@ import { useTheme } from "next-themes";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { Card, CardBody, Spinner } from "@nextui-org/react";
+import { useTranslations } from "next-intl";
 
 export default function Cover() {
   return (
@@ -27,6 +28,8 @@ function Main() {
   const { setTheme, theme } = useTheme();
   const isDarkMode = typeof window !== "undefined" ? theme === "dark" : false;
 
+  const t = useTranslations();
+
   const getDimentions = () => {
     const cover = document.querySelector(".cover-display") as HTMLImageElement;
     if (cover != null) {
@@ -45,7 +48,9 @@ function Main() {
     }
     document.head.appendChild(favicon);
 
-    document.title = `Cover | ${title}`;
+    if (title != null) {
+      document.title = `${t("cover")} | ${title}`;
+    }
 
     if (imageSrc != null) {
       setBackground(`url(${imageSrc})`);
@@ -53,6 +58,7 @@ function Main() {
   };
 
   useEffect(() => {
+    document.title = t("website_cover_page_title");
     infoManager(imageSrc as string, title as string);
     setTimeout(() => {
       setLoading(false);

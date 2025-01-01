@@ -16,18 +16,18 @@ import { fontSans } from "@/src/config/fonts";
 import { ThemeSwitch } from "../components/theme-switch";
 
 import { NextIntlClientProvider } from "next-intl";
-import { getLocale, getMessages } from "next-intl/server";
+import { getLocale, getMessages, getTranslations } from "next-intl/server";
 
-export const metadata: Metadata = {
-  title: {
-    default: "Track Information",
-    template: "Track Information",
-  },
-  description: "Track Information",
-  icons: {
-    icon: "/favicon.ico",
-  },
-};
+// export const metadata: Metadata = {
+//   title: {
+//     default: "Track Information",
+//     template: "Track Information",
+//   },
+//   description: "Track Information",
+//   icons: {
+//     icon: "/favicon.ico",
+//   },
+// };
 
 export const viewport: Viewport = {
   themeColor: [
@@ -42,13 +42,12 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const locale = await getLocale();
-
-  // Providing all messages to the client
-  // side is the easiest way to get started
   const messages = await getMessages();
+  const t = await getTranslations();
   return (
-    <html suppressHydrationWarning lang="en">
+    <html suppressHydrationWarning lang={locale}>
       <head>
+        <title>{t("website_title")}</title>
         <script
           src="https://kit.fontawesome.com/da71fc72b9.js"
           crossOrigin="anonymous"
@@ -61,7 +60,7 @@ export default async function RootLayout({
           fontSans.variable
         )}
       >
-        <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider messages={messages} locale={locale}>
           <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
             <div style={{ background: "transparent" }}>
               <ThemeSwitch />
