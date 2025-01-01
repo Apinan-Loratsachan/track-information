@@ -126,6 +126,24 @@ function Main() {
     .filter((title) => title.trim() !== "")
     .map((title) => title.trim());
 
+  const coverManager = (url: string) => {
+    setCover(url);
+    setBackground(`url(${url})`);
+    const bg = document.getElementById("background") as HTMLDivElement;
+    bg.style.backgroundImage = `url(${url})`;
+    const favicon = document.createElement("link");
+    favicon.rel = "icon";
+    favicon.type = "image/jpg";
+    favicon.href = url;
+    const oldFavicon = document.querySelector("link[rel='icon']");
+    if (oldFavicon) {
+      document.head.removeChild(oldFavicon);
+    }
+    document.head.appendChild(favicon);
+
+    document.title = `${title} - ${artist}`;
+  };
+
   useEffect(() => {
     const fetchAlbumData = async () => {
       let albumCover;
@@ -142,28 +160,14 @@ function Main() {
           setAlbumData(data);
           setSpotifyAlbumName(data.name);
 
-          // Set background image
-          const bg = document.getElementById("background") as HTMLDivElement;
-
-          // Set favicon
-          const favicon = document.createElement("link");
-          favicon.rel = "icon";
-          favicon.type = "image/jpg";
-
           // Set the cover based on customAlbumCover or albumData
           if (customAlbumCover) {
-            setCover(customAlbumCover);
-            favicon.href = customAlbumCover;
-            setBackground(`url(${customAlbumCover})`);
+            coverManager(customAlbumCover);
             albumCover = customAlbumCover;
           } else if (data?.images?.[0]?.url) {
-            setCover(data.images[0].url);
-            favicon.href = data.images[0].url;
-            setBackground(`url(${data.images[0].url})`);
+            coverManager(data.images[0].url);
             albumCover = data.images[0].url;
           }
-
-          document.head.appendChild(favicon);
 
           if (discCount != 1) {
             let trackData;
@@ -221,14 +225,7 @@ function Main() {
           setError(err.message);
         }
       } else if (customAlbumCover) {
-        setCover(customAlbumCover);
-        const favicon = document.createElement("link");
-        favicon.rel = "icon";
-        favicon.type = "image/jpg";
-        favicon.href = customAlbumCover;
-        document.head.appendChild(favicon);
-        const bg = document.getElementById("background") as HTMLDivElement;
-        setBackground(`url(${customAlbumCover})`);
+        coverManager(customAlbumCover);
         albumCover = customAlbumCover;
       } else if ((spotifyCoverId as string) !== "") {
         try {
@@ -243,17 +240,7 @@ function Main() {
           setAlbumData(data);
           setSpotifyAlbumName(data.name);
 
-          // Set favicon
-          const favicon = document.createElement("link");
-          favicon.rel = "icon";
-          favicon.type = "image/jpg";
-          favicon.href = data.images[0].url; // Replace with your favicon URL
-          document.head.appendChild(favicon);
-          setCover(data.images[0].url);
-
-          // Set background image
-          const bg = document.getElementById("background") as HTMLDivElement;
-          setBackground(`url(${data.images[0].url})`);
+          coverManager(data.images[0].url);
           albumCover = data.images[0].url;
         } catch (err: any) {
           setError(err.message);
@@ -267,14 +254,7 @@ function Main() {
         }
         const data = await response.json();
         setAlbumData(data);
-        setCover(data.albums.items[0].images[0].url);
-        const favicon = document.createElement("link");
-        favicon.rel = "icon";
-        favicon.type = "image/jpg";
-        favicon.href = data.albums.items[0].images[0].url; // Replace with your favicon URL
-        document.head.appendChild(favicon);
-        const bg = document.getElementById("background") as HTMLDivElement;
-        setBackground(`url(${data.albums.items[0].images[0].url})`);
+        coverManager(data.albums.items[0].images[0].url);
         albumCover = data.albums.items[0].images[0].url;
         setSearchWarning(true);
       }
@@ -465,7 +445,10 @@ function Main() {
             <CardHeader className="flex gap-3 justify-center">
               {cover ? (
                 <div className="album-cover-container animate__animated animate__zoomInDown">
-                  <Link href={`/cover?src=${cover}`} target="_blank">
+                  <Link
+                    href={`/cover?src=${cover}&desc=${title} - ${artist}`}
+                    target="_blank"
+                  >
                     <Image
                       className="album-cover"
                       alt="cover"

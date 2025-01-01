@@ -17,6 +17,7 @@ export default function Cover() {
 function Main() {
   const searchParams = useSearchParams();
   const imageSrc = searchParams.get("src") || null;
+  const title = searchParams.get("desc") || null;
 
   const [background, setBackground] = useState<string | null>(null);
   const [coverState, setCoverState] = useState<boolean>(true);
@@ -33,10 +34,26 @@ function Main() {
     }
   };
 
-  useEffect(() => {
+  const infoManager = (coverUrl: string, title: string) => {
+    const favicon = document.createElement("link");
+    favicon.rel = "icon";
+    favicon.type = "image/jpg";
+    favicon.href = coverUrl;
+    const oldFavicon = document.querySelector("link[rel='icon']");
+    if (oldFavicon) {
+      document.head.removeChild(oldFavicon);
+    }
+    document.head.appendChild(favicon);
+
+    document.title = `Cover | ${title}`;
+
     if (imageSrc != null) {
       setBackground(`url(${imageSrc})`);
     }
+  };
+
+  useEffect(() => {
+    infoManager(imageSrc as string, title as string);
     setTimeout(() => {
       setLoading(false);
     }, 1000);
