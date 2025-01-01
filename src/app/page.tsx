@@ -80,7 +80,11 @@ function Main() {
   const [spotifyAlbumEmbedHeight, setSpotifyAlbumEmbedHeight] =
     useState<number>(0);
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const {
+    isOpen: isSpotifyAlbumOpen,
+    onOpen: onSpotifyAlbumOpen,
+    onOpenChange: onSpotifyAlbumOpenChange,
+  } = useDisclosure();
 
   const { setTheme, theme } = useTheme();
   const isDarkMode = typeof window !== "undefined" ? theme === "dark" : false;
@@ -718,7 +722,7 @@ function Main() {
                             isIconOnly
                             color="success"
                             variant="shadow"
-                            onPress={onOpen}
+                            onPress={onSpotifyAlbumOpen}
                             className="animate__animated animate__zoomIn"
                           >
                             <i className="fa-brands fa-spotify fa-xl"></i>
@@ -940,8 +944,8 @@ function Main() {
         </NoSsr>
         {spotifyAlbumEmbed != "" || spotifyAlbumEmbed != null ? (
           <Modal
-            isOpen={isOpen}
-            onOpenChange={onOpenChange}
+            isOpen={isSpotifyAlbumOpen}
+            onOpenChange={onSpotifyAlbumOpenChange}
             backdrop="blur"
             size="2xl"
             isDismissable={false}

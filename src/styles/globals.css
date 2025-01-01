@@ -28,3 +28,7 @@ body {
   max-width: 780px;
   z-index: 1;
 }
+
+.button-container {
+  margin: 0 10px;
+}
