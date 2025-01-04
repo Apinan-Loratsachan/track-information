@@ -1,10 +1,12 @@
 .animate-charcter {
   /* text-transform: uppercase; */
-  background-image: radial-gradient(circle at 50% 50%,
-      #231557 0%,
-      #44107a 29%,
-      #ff1361 67%,
-      #ffbb00 100%);
+  background-image: radial-gradient(
+    circle at 50% 50%,
+    #231557 0%,
+    #44107a 29%,
+    #ff1361 67%,
+    #ffbb00 100%
+  );
   background-size: auto auto;
   background-clip: border-box;
   background-size: 200% auto;
@@ -20,11 +22,13 @@
 
 .animate-charcter-alt {
   /* text-transform: uppercase; */
-  background-image: radial-gradient(circle at 50% 50%,
-      #4adede 0%,
-      #78d5f5 29%,
-      #1ca7ec 67%,
-      #787ff6 100%);
+  background-image: radial-gradient(
+    circle at 50% 50%,
+    #78d5f5 0%,
+    #787ff6 29%,
+    #4adede 67%,
+    #1ca7ec 100%
+  );
   background-size: auto auto;
   background-clip: border-box;
   background-size: 200% auto;

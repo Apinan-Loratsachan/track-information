@@ -147,21 +147,6 @@ function Main() {
     document.title = `${title} - ${artist}`;
   };
   useEffect(() => {
-    async function checkSpotifyLogin() {
-      try {
-        const response = await fetch("/api/spotify/get-user-data");
-        if (response.ok) {
-          const data = await response.json();
-          setLoggedIn(data.loggedIn);
-        } else {
-          setLoggedIn(false);
-        }
-      } catch (error) {
-        console.error("Error checking Spotify login:", error);
-        setLoggedIn(false);
-      }
-    }
-
     const fetchAlbumData = async () => {
       let albumCover;
       if ((spotifyAlbumId as string) !== "") {
@@ -309,7 +294,6 @@ function Main() {
       }
     };
 
-    checkSpotifyLogin();
     fetchAlbumData();
   }, [spotifyAlbumId, customAlbumCover, spotifyEmbedOpacity]);
 
