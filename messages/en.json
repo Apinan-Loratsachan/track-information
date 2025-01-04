@@ -28,5 +28,9 @@
     "applying": "Applying",
     "website_title": "Track Information",
     "website_cover_page_title": "Cover | Track Information",
-    "cover": "Cover"
+    "cover": "Cover",
+    "spotify_album_button_description": "Show tracks in album from Spotify",
+    "spotify_embed_track_description_1": "If this is preview, you can",
+    "spotify_embed_track_description_2": "Spotify on this browser for listen full track.",
+    "login": "Login"
 }

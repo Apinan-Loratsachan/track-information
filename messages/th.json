@@ -28,5 +28,9 @@
     "applying": "กําลังปรับใช้",
     "website_title": "ข้อมูลเพลง",
     "website_cover_page_title": "ภาพปก | ข้อมูลเพลง",
-    "cover": "ภาพปก"
+    "cover": "ภาพปก",
+    "spotify_album_button_description": "แสดงเพลงในอัลบั้มจาก Spotify",
+    "spotify_embed_track_description_1": "หากนี่คือตัวอย่าง คุณสามารถ",
+    "spotify_embed_track_description_2": "Spotify บนเบราว์เซอร์นี้เพื่อฟังเพลงเต็มได้",
+    "login": "เข้าสู่ระบบ"
 }

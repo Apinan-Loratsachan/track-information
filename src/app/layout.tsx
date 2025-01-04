@@ -64,7 +64,9 @@ export default async function RootLayout({
           <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
             <div style={{ background: "transparent" }}>
               <ThemeSwitch />
-              <div style={{ padding: "50px 0" }}>{children}</div>
+              <div style={{ padding: "50px 0" }} className="select-none">
+                {children}
+              </div>
             </div>
           </Providers>
         </NextIntlClientProvider>

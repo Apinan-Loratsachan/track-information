@@ -1,6 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   Card,
   CardHeader,
@@ -43,6 +43,7 @@ export default function Home() {
 }
 
 function Main() {
+  const router = useRouter();
   const t = useTranslations();
 
   const searchParams = useSearchParams();
@@ -79,6 +80,7 @@ function Main() {
   const [spotifyTrackUrl, setSpotifyTrackUrl] = useState<string>("");
   const [spotifyAlbumEmbedHeight, setSpotifyAlbumEmbedHeight] =
     useState<number>(0);
+  const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
 
   const {
     isOpen: isSpotifyAlbumOpen,
@@ -96,6 +98,7 @@ function Main() {
 
   const alertTimeout = React.useRef<number | null>(null);
   const alertAnimateTimeout = React.useRef<number | null>(null);
+
   const displayAlert = () => {
     if (alertTimeout.current) {
       clearTimeout(alertTimeout.current);
@@ -143,14 +146,28 @@ function Main() {
 
     document.title = `${title} - ${artist}`;
   };
-
   useEffect(() => {
+    async function checkSpotifyLogin() {
+      try {
+        const response = await fetch("/api/spotify/get-user-data");
+        if (response.ok) {
+          const data = await response.json();
+          setLoggedIn(data.loggedIn);
+        } else {
+          setLoggedIn(false);
+        }
+      } catch (error) {
+        console.error("Error checking Spotify login:", error);
+        setLoggedIn(false);
+      }
+    }
+
     const fetchAlbumData = async () => {
       let albumCover;
       if ((spotifyAlbumId as string) !== "") {
         try {
           const response = await fetch(
-            `/api/spotify/getAlbumData?spotifyAlbumId=${spotifyAlbumId}`
+            `/api/spotify/get-album-data?spotifyAlbumId=${spotifyAlbumId}`
           );
           if (!response.ok) {
             throw new Error("Failed to fetch album data");
@@ -230,7 +247,7 @@ function Main() {
       } else if ((spotifyCoverId as string) !== "") {
         try {
           const response = await fetch(
-            `/api/spotify/getAlbumData?spotifyAlbumId=${spotifyCoverId}`
+            `/api/spotify/get-album-data?spotifyAlbumId=${spotifyCoverId}`
           );
           if (!response.ok) {
             throw new Error("Failed to fetch album data");
@@ -264,7 +281,7 @@ function Main() {
           `https://open.spotify.com/embed/track/${spotifyTrackId}`
         );
         const response = await fetch(
-          `/api/spotify/getTrackData?spotifyTrackId=${spotifyTrackId}`
+          `/api/spotify/get-track-data?spotifyTrackId=${spotifyTrackId}`
         );
         if (!response.ok) {
           throw new Error("Failed to fetch album data");
@@ -292,6 +309,7 @@ function Main() {
       }
     };
 
+    checkSpotifyLogin();
     fetchAlbumData();
   }, [spotifyAlbumId, customAlbumCover, spotifyEmbedOpacity]);
 
@@ -411,14 +429,32 @@ function Main() {
               : "")
           }
         >
-          <iframe
-            id="spotify-embed-iframe"
-            title="Spotify-Embed"
-            src={spotifyEmbed}
-            height={"152px"}
-            allow="encrypted-media"
-            style={{ borderRadius: "15px" }}
-          />
+          <Tooltip
+            showArrow
+            style={{ opacity: spotifyEmbedOpacity }}
+            content={
+              <div>
+                {t("spotify_embed_track_description_1")}&nbsp;
+                <Link
+                  href="https://accounts.spotify.com/login"
+                  className="text-sm"
+                  underline="always"
+                >
+                  {t("login")}
+                </Link>
+                &nbsp;{t("spotify_embed_track_description_2")}
+              </div>
+            }
+          >
+            <iframe
+              id="spotify-embed-iframe"
+              title="Spotify-Embed"
+              src={spotifyEmbed}
+              height={"152px"}
+              allow="encrypted-media"
+              style={{ borderRadius: "15px" }}
+            />
+          </Tooltip>
         </div>
       ) : null}
       <div
@@ -701,15 +737,22 @@ function Main() {
                       <td>
                         {t("album")}{" "}
                         {spotifyAlbumEmbed ? (
-                          <Button
-                            isIconOnly
+                          <Tooltip
+                            showArrow
+                            placement="right"
                             color="success"
-                            variant="shadow"
-                            onPress={onSpotifyAlbumOpen}
-                            className="animate__animated animate__zoomIn"
+                            content={t("spotify_album_button_description")}
                           >
-                            <i className="fa-brands fa-spotify fa-xl"></i>
-                          </Button>
+                            <Button
+                              isIconOnly
+                              color="success"
+                              variant="shadow"
+                              onPress={onSpotifyAlbumOpen}
+                              className="animate__animated animate__zoomIn"
+                            >
+                              <i className="fa-brands fa-spotify fa-xl"></i>
+                            </Button>
+                          </Tooltip>
                         ) : null}
                       </td>
                       <td>
@@ -941,7 +984,12 @@ function Main() {
               {(onClose) => (
                 <>
                   <ModalHeader className="flex flex-col gap-1">
-                    {album}
+                    <div>
+                      <i className="fa-solid fa-compact-disc" />
+                      &nbsp;&nbsp;
+                      {t("album")} /&nbsp;
+                      <span style={{ opacity: 0.7 }}>{album}</span>
+                    </div>
                   </ModalHeader>
                   <ModalBody style={{ position: "relative" }}>
                     <Spinner

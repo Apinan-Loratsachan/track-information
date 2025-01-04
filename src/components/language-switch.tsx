@@ -85,7 +85,19 @@ const LanguageSwitcher = () => {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                {isLoading ? t("applying") : t("languages")}
+                {isLoading ? (
+                  <div className="flex items-center">
+                    <i className="fa-solid fa-rotate" />
+                    &nbsp;&nbsp;
+                    {t("applying")}...
+                  </div>
+                ) : (
+                  <div className="flex items-center">
+                    <i className="fa-solid fa-globe" />
+                    &nbsp;&nbsp;
+                    {t("languages")}
+                  </div>
+                )}
               </ModalHeader>
               <ModalBody style={{ position: "relative" }}>
                 {isLoading ? (
