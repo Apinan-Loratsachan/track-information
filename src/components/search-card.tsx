@@ -51,7 +51,7 @@ export default function SearchCard({
           style={{ padding: padding, objectFit: "cover" }}
           alt="Card background"
           //   className="z-0 w-full h-full object-cover"
-          height={200}
+          // height={210}
           src={image}
         />
         <CardFooter
