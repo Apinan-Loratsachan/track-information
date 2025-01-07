@@ -835,7 +835,7 @@ function Main() {
                       </tr>
                     ) : (
                       <tr className="expandable-row">
-                        <td>Album Artist</td>
+                        <td>{t("album_artist")}</td>
                         <td>{albumArtist}</td>
                         <td>
                           <Button
