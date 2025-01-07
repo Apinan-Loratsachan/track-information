@@ -147,6 +147,7 @@ const LanguageSwitcher = () => {
                         style={{
                           paddingRight: "20px",
                           pointerEvents: locale == newLocale ? "none" : "all",
+                          transition: "all 0.2s",
                         }}
                         variant={locale == newLocale ? "flat" : "shadow"}
                         color={locale == newLocale ? "default" : "primary"}
