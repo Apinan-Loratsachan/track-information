@@ -47,9 +47,9 @@ function Main() {
 
   const searchParams = useSearchParams();
   const title = searchParams.get("tr") || t(t("unknown"));
-  const artist = searchParams.get("ar") || t("unknown");
+  let artist = searchParams.get("ar") || t("unknown");
   const album = searchParams.get("al") || t("unknown");
-  const albumArtist = searchParams.get("alar") || t("unknown");
+  let albumArtist = searchParams.get("alar") || t("unknown");
   const trackNumber = parseInt(searchParams.get("tn") || "0");
   const trackCount = parseInt(searchParams.get("tc") || "0");
   const discNumber = parseInt(searchParams.get("dn") || "0");
@@ -116,8 +116,6 @@ function Main() {
   };
 
   let splitRelated = (related as string).split(";").map((id) => id.trim());
-  console.log(splitRelated[0] == "");
-  console.log(splitRelated.length);
   const artistArray = artist
     .split(
       /(?:feat\.|meets|×|with|cv\.|Cv\.|CV\.|cv:|Cv:|CV:|cv |Cv |CV |va\.|Va\.|VA\.|va:|Va:|VA:|va |Va |VA |vo\.|Vo\.|VO\.|vo:|Vo:|VO:|vo |Vo |VO |&|\(\s*|\s*\)|\[|\]|,)/g
@@ -134,6 +132,20 @@ function Main() {
     .split(";")
     .filter((title) => title.trim() !== "")
     .map((title) => title.trim().toLowerCase().replaceAll(" ", ""));
+
+  if (
+    artist.toLowerCase().replaceAll(" ", "") ==
+    "Various Artists".toLowerCase().replaceAll(" ", "")
+  ) {
+    artist = t("various_artists");
+  }
+
+  if (
+    albumArtist.toLowerCase().replaceAll(" ", "") ==
+    "Various Artists".toLowerCase().replaceAll(" ", "")
+  ) {
+    albumArtist = t("various_artists");
+  }
 
   const coverManager = (url: string) => {
     setCover(url);
@@ -661,7 +673,7 @@ function Main() {
                         </td>
                       </tr>
                     ) : null}
-                    {artist != "Various Artists" ? (
+                    {artist != t("various_artists") ? (
                       <tr className="expandable-row">
                         <td>{t("artist")}</td>
                         <td>
@@ -801,7 +813,7 @@ function Main() {
                         </tr>
                       ) : null
                     ) : null}
-                    {albumArtist != "Various Artists" ? (
+                    {albumArtist != t("various_artists") ? (
                       <tr className="expandable-row">
                         <td>{t("album_artist")}</td>
                         <td>
