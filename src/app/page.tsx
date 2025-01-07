@@ -46,18 +46,18 @@ function Main() {
   const t = useTranslations();
 
   const searchParams = useSearchParams();
-  const title = searchParams.get("tr") || "Unknown";
-  const artist = searchParams.get("ar") || "Unknown";
-  const album = searchParams.get("al") || "Unknown";
-  const albumArtist = searchParams.get("alar") || "Unknown";
+  const title = searchParams.get("tr") || t(t("unknown"));
+  const artist = searchParams.get("ar") || t("unknown");
+  const album = searchParams.get("al") || t("unknown");
+  const albumArtist = searchParams.get("alar") || t("unknown");
   const trackNumber = parseInt(searchParams.get("tn") || "0");
   const trackCount = parseInt(searchParams.get("tc") || "0");
   const discNumber = parseInt(searchParams.get("dn") || "0");
   const discCount = parseInt(searchParams.get("dc") || "0");
-  const length = searchParams.get("len") || "Unknown";
-  const genre = searchParams.get("ge") || "Unknown";
-  const year = searchParams.get("y") || "Unknown";
-  const language = searchParams.get("lang") || "Unknown";
+  const length = searchParams.get("len") || t("unknown");
+  const genre = searchParams.get("ge") || t("unknown");
+  const year = searchParams.get("y") || t("unknown");
+  const language = searchParams.get("lang") || t("unknown");
   const related = searchParams.get("rel") || "";
   const alternatTitle = searchParams.get("atr") || "";
   const customAlbumCover = searchParams.get("cti");
@@ -116,6 +116,8 @@ function Main() {
   };
 
   let splitRelated = (related as string).split(";").map((id) => id.trim());
+  console.log(splitRelated[0] == "");
+  console.log(splitRelated.length);
   const artistArray = artist
     .split(
       /(?:feat\.|meets|×|with|cv\.|Cv\.|CV\.|cv:|Cv:|CV:|cv |Cv |CV |va\.|Va\.|VA\.|va:|Va:|VA:|va |Va |VA |vo\.|Vo\.|VO\.|vo:|Vo:|VO:|vo |Vo |VO |&|\(\s*|\s*\)|\[|\]|,)/g
@@ -127,6 +129,11 @@ function Main() {
     .split(";")
     .filter((title) => title.trim() !== "")
     .map((title) => title.trim());
+
+  const alternatTitleArrayValidate = alternatTitle!
+    .split(";")
+    .filter((title) => title.trim() !== "")
+    .map((title) => title.trim().toLowerCase().replaceAll(" ", ""));
 
   const coverManager = (url: string) => {
     setCover(url);
@@ -629,10 +636,17 @@ function Main() {
                             </span>
                           ))}
                           {spotifyTrackName.toLowerCase().replaceAll(" ", "") !=
-                          title.toLowerCase().replaceAll(" ", "") ? (
+                            title.toLowerCase().replaceAll(" ", "") &&
+                          !alternatTitleArrayValidate.includes(
+                            spotifyTrackName
+                              .trim()
+                              .toLowerCase()
+                              .replaceAll(" ", "")
+                          ) ? (
                             <span>
                               ,&nbsp;
                               <Link
+                                className="expandable-row alt-row"
                                 href={
                                   "https://www.google.com/search?q=" +
                                   spotifyTrackName
@@ -837,8 +851,8 @@ function Main() {
                     <tr>
                       <td>{t("disc")}</td>
                       <td colSpan={2}>
-                        {`${discNumber == 0 ? "Unknown" : discNumber}/${
-                          discCount == 0 ? "Unknown" : discCount
+                        {`${discNumber == 0 ? t("unknown") : discNumber}/${
+                          discCount == 0 ? t("unknown") : discCount
                         }`}
                       </td>
                     </tr>
@@ -846,7 +860,7 @@ function Main() {
                       <td>{t("track")}</td>
                       <td
                         colSpan={2}
-                      >{`${trackNumber == 0 ? "Unknown" : trackNumber}/${trackCount == 0 ? "Unknown" : trackCount}`}</td>
+                      >{`${trackNumber == 0 ? t("unknown") : trackNumber}/${trackCount == 0 ? t("unknown") : trackCount}`}</td>
                     </tr>
                     <tr>
                       <td>{t("length")}</td>
@@ -864,42 +878,45 @@ function Main() {
                       <td>{t("language")}</td>
                       <td colSpan={2}>{language}</td>
                     </tr>
-                    <tr>
-                      <td>{t("related")}</td>
-                      <td colSpan={2}>
-                        {(splitRelated.length > 1 &&
-                          splitRelated.map((relatedItem, index) => (
-                            <span key={index}>
-                              <Link
-                                href={
-                                  "https://www.google.com/search?q=" +
-                                  relatedItem
-                                }
-                                target="_blank"
-                                underline="hover"
-                              >
-                                #{relatedItem}
-                              </Link>
-                              {index < splitRelated.length - 1 &&
-                                "\u00A0\u00A0\u00A0"}
-                            </span>
-                          ))) ||
-                        splitRelated[0] === "" ? (
-                          "None"
-                        ) : (
-                          <Link
-                            href={
-                              "https://www.google.com/search?q=" +
-                              splitRelated[0]
-                            }
-                            target="_blank"
-                            underline="hover"
-                          >
-                            #{splitRelated[0]}
-                          </Link>
-                        )}
-                      </td>
-                    </tr>
+                    {splitRelated.length == 1 &&
+                    splitRelated[0] == "" ? null : (
+                      <tr>
+                        <td>{t("related")}</td>
+                        <td colSpan={2}>
+                          {(splitRelated.length > 1 &&
+                            splitRelated.map((relatedItem, index) => (
+                              <span key={index}>
+                                <Link
+                                  href={
+                                    "https://www.google.com/search?q=" +
+                                    relatedItem
+                                  }
+                                  target="_blank"
+                                  underline="hover"
+                                >
+                                  #{relatedItem}
+                                </Link>
+                                {index < splitRelated.length - 1 &&
+                                  "\u00A0\u00A0\u00A0"}
+                              </span>
+                            ))) ||
+                          splitRelated[0] === "" ? (
+                            "None"
+                          ) : (
+                            <Link
+                              href={
+                                "https://www.google.com/search?q=" +
+                                splitRelated[0]
+                              }
+                              target="_blank"
+                              underline="hover"
+                            >
+                              #{splitRelated[0]}
+                            </Link>
+                          )}
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
                 <div className="py-4">
