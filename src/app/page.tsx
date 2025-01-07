@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import {
   Card,
   CardHeader,
@@ -43,7 +43,6 @@ export default function Home() {
 }
 
 function Main() {
-  const router = useRouter();
   const t = useTranslations();
 
   const searchParams = useSearchParams();
