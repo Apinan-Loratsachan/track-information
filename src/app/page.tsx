@@ -79,7 +79,8 @@ function Main() {
   const [spotifyTrackUrl, setSpotifyTrackUrl] = useState<string>("");
   const [spotifyAlbumEmbedHeight, setSpotifyAlbumEmbedHeight] =
     useState<number>(0);
-  const [loggedIn, setLoggedIn] = useState<boolean | null>(null);
+  const [spotifyAlbumEmbedHeightAnimate, setSpotifyAlbumEmbedHeightAnimate] =
+    useState<boolean>(false);
 
   const {
     isOpen: isSpotifyAlbumOpen,
@@ -87,7 +88,7 @@ function Main() {
     onOpenChange: onSpotifyAlbumOpenChange,
   } = useDisclosure();
 
-  const { setTheme, theme } = useTheme();
+  const { theme } = useTheme();
   const isDarkMode = typeof window !== "undefined" ? theme === "dark" : false;
 
   const [isVisible, setIsVisible] = React.useState(false);
@@ -756,7 +757,13 @@ function Main() {
                               isIconOnly
                               color="success"
                               variant="shadow"
-                              onPress={onSpotifyAlbumOpen}
+                              onPress={() => {
+                                setSpotifyAlbumEmbedHeightAnimate(false);
+                                onSpotifyAlbumOpen();
+                                setTimeout(() => {
+                                  setSpotifyAlbumEmbedHeightAnimate(true);
+                                }, 500);
+                              }}
                               className="animate__animated animate__zoomIn"
                             >
                               <i className="fa-brands fa-spotify fa-xl"></i>
@@ -1019,7 +1026,12 @@ function Main() {
                       title="Spotify-Album-Embed"
                       className="animate__animated animate__zoomIn animate__delay-1s"
                       src={spotifyAlbumEmbed}
-                      style={{ height: spotifyAlbumEmbedHeight + "px" }}
+                      style={{
+                        height: spotifyAlbumEmbedHeightAnimate
+                          ? spotifyAlbumEmbedHeight + "px"
+                          : "0px",
+                        transition: "height 1s ease-in-out",
+                      }}
                       height="100%"
                       allow="encrypted-media"
                     />
